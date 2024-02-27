@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.0.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'war'
+}
+
+group = 'com.boin'
+version = '1.0.0'
+sourceCompatibility = '17'
+
+configurations.all {
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-web-services'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+    implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.data:spring-data-redis'
+    implementation 'org.springframework.security:spring-security-core:6.0.0'
+    implementation 'org.springframework.security:spring-security-web:6.0.0'
+    implementation 'org.springframework.security:spring-security-config:6.0.0'
+
+    //project lib dependencies
+    implementation 'com.yahoofinance-api:YahooFinanceAPI:3.17.0'
+
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.amazonaws:aws-java-sdk:1.12.647'
+    implementation 'commons-fileupload:commons-fileupload:1.5'
+    implementation 'commons-io:commons-io:2.15.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'mysql:mysql-connector-java'
+    implementation 'org.apache.httpcomponents:httpclient'
+    implementation 'org.apache.commons:commons-lang3'
+    implementation 'org.apache.commons:commons-dbcp2:2.10.0'
+    implementation 'org.apache.ant:ant:1.10.14'
+    implementation 'org.json:json:20231013'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0-M1'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+tasks.named('test') {
+    useJUnitPlatform()
+}

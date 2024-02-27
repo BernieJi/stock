@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.themeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head>
+        <title>金融系統</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" href="https://unpkg.com/purecss@2.1.0/build/pure-min.css"> 
+    	<!-- 導入JQuery -->
+    	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    	<!-- 導入JavaScript 檔案 -->
+    	<script type="text/javascript" src="js/index.js"></script>
+    	<!-- 導入FontAwesome -->
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    	<!-- 導入Bootstrap -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+
+    <body>
+    	<div class="container-all">
+	    	<div class="container-left">
+	    		<nav id="sidebar">
+	    			<button type="button" id="collapse" class="collapse-btn">
+	    				<i class="fa-solid fa-align-left"></i>
+	    			</button>
+	    			<ul class="list-unstyled">
+	    				<h2>金融系統</h2>
+	    				<li>
+	    					<a href="/index">首頁Home <i class="fa-solid fa-house-chimney"></i></a>
+	    				</li>
+	    				<li>
+	    					<a href="/index/stock">股票 <i class="fa-solid fa-arrow-trend-up"></i></a>
+	    				</li>
+	    				<li>
+	    					<a href="/index/watchlist">個人追蹤列表 <i class="fa-solid fa-wallet"></i></a>
+	    				</li>
+	    				<li>
+	    					<a href="/index/information">修改個人資料 <i class="fa-solid fa-gear"></i></a>
+	    				</li>
+	    				<li>
+	    					<a sec:authorize="hasAuthority('admin')" href="/index/adminpage">管理員頁面 <i class="fa-solid fa-people-roof"></i></a>
+	    				</li>
+	    				<li>
+	    					<a sec:authorize="hasAnyAuthority('admin','user')" href="/logout">登出 <i class="fa-solid fa-right-from-bracket"></i></a>
+	    				</li>
+	    			</ul>
+	    		</nav>
+			</div>
+			
+			<div class="container-middle">
+				<div class="container-fluid">
+					<p th:text="您好！歡迎回來金融理財系統">name</p>
+					<h5>登入資訊：</h5>
+					<ul>
+						<li>登入帳號：<span sec:authentication="name">123</span></li>
+						<li>權限：<span sec:authentication="authorities"></span></li>
+						<li>客戶端地址：<span sec:authentication="details.remoteAddress"></span></li>
+						<li>Session Id:<span sec:authentication="details.sessionId"></span></li>
+						<li>現在時間：<span id="time"></span></li>
+
+						<script type="text/javascript">
+							var loginDate = new Date();
+							var loginTime = loginDate.toLocaleString();
+							document.getElementById('time').innerHTML=loginTime
+						</script>
+					</ul>
+											
+					<script type="text/javascript">
+						// var loginDate = new Date();
+						var loginTime = new Date().toLocaleString();
+						document.getElementById('time').innerHTML=loginTime
+
+						axios.get('http://localhost:8081/admininfo/rawdata/all')
+								.then(res =>{
+									console.log(res);
+								})
+								.catch(
+									console.log('axios 發生錯誤惹...')
+								)
+					</script>
+	        </div>
+		</div> 
+
+			<div class="container-right" >
+	        	<img style="width:500px;height:500px" src="images/index.jpg">
+	        </div>     
+		</div>
+    </body>
+</html>

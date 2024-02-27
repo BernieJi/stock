@@ -1,0 +1,62 @@
+h1{
+    color: gold;
+    text-shadow: 3px 3px 10px black;
+    text-align:center;
+}
+
+form{
+    position:fixed; right:20px;top:20px; 
+    color:black;
+    background-color:rgba(128, 128, 128, 0.577);
+    box-shadow:5px 5px 25px white;
+    text-align:center;
+    width:500px;
+}
+
+form input{
+    display:block;
+    margin:20px auto;
+    text-align:center;
+    background: bisque;
+    padding:20px;
+    font-size:10px;
+    border-radius: 22px;
+    outline:none;
+    color:#f8f9fa;
+}
+
+body{
+    background-color: darkgray;
+    font-family: Roboto;
+    background-image: url(../images/registerbackground.jpg);
+    background-size: cover;
+}
+
+form input[type="date"],input[type="email"],input[type="text"],form input[type="password"]{
+    border: 2px solid #3498db;
+    color:black;
+    font-size: 15px;
+    width:220px;
+}
+
+form input[type="date"]:focus,input[type="email"]:focus,input[type="text"]:focus,input[type="password"]:focus{
+    border-color:#2ecc71;
+    width:280px;
+    transition:0.5s;
+}
+
+form input::-webkit-input-placeholder {
+    font-size: 15px;
+}
+
+form button[type="submit"]{
+    width:150px;
+    border:2px solid #2ecc71;
+    background-color: #3498db;
+    cursor:pointer;
+}
+
+form [type="submit"]:hover{
+    background-color:#2ecc71;
+    transition: 0.5s;
+}

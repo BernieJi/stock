@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.themeleaf.org">
+    <head>
+        <title>AdminPage</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="https://unpkg.com/purecss@2.1.0/build/pure-min.css">
+        <!-- 導入JQuery -->
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<!-- 導入FontAwesome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    </head>
+
+    <body> 	
+    	<div th:object="${ usersz}" style="position:relative;top:50px;left:260px">
+			<a href="../index">上一頁回首頁 <i class="fa-solid fa-house-chimney"></i></a>
+			<h1>管理員頁面</h1>
+			<table class="pure-table pure-table-bordered">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>username</th>
+						<th>email</th>
+						<th>權限</th>
+						<th>賦予管理者權限</th>
+						<th>刪除</th>		
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="users,stat :${ usersz}">
+						<td th:text="${users.id}"></td>
+						<td th:text="${users.username}">帳戶名稱</td>
+						<td th:text="${users.email}">Email</td>
+						<td th:text="${users.authority}">權限</td>
+						<td><a type="button" th:href="@{/index/adminpage/admin/{usersid}(usersid=${users.id})}" style="text-decoration:none; border:2px,solid,black">給予admin權限</a></td>
+						<td><a type="button" th:href="@{/index/adminpage/delete(id=${users.id})}" style="text-decoration:none; border:2px,solid,black">刪除用戶</a></td>
+						
+					</tr>
+				</tbody>
+			</table>  
+		</div>
+		    		
+    </body>
+</html>

@@ -1,0 +1,90 @@
+body{
+    font-family: Roboto;
+    background-image: url(../images/loginbackground.jpg);
+    background-size:cover;
+}
+
+h1{
+    color:aqua;
+    text-align:center;
+    font-family: Roboto;
+    font-size: 50px;
+    
+}
+
+.loginform{
+    position: fixed; right: 50px; top:150px;
+    width:400px;
+    padding:30px;
+    box-shadow:5px 5px 25px white;
+    background-color:rgb(128, 128, 128,85%);
+    color:white;      
+    text-align:center;
+}
+
+.loginform input{
+    display:block;
+    margin:20px auto;
+    text-align:center;
+    background: none;
+    padding:10px;
+    font-size:15px;
+    border-radius: 22px;
+    outline:none;
+    color:#f8f9fa;
+}
+
+.loginform input[type="text"],.loginform input[type="password"]{
+    border: 2px solid #3498db;
+    width:220px;
+}
+
+.loginform input[type="checkbox"]{
+	margin:5px;
+    display:inline;
+}
+
+.loginform input[type="submit"]{
+    width:150px;
+    border:2px solid #2ecc71;
+    cursor:pointer;
+}
+
+.loginform input[type="text"]:focus,.loginform input[type="password"]:focus{
+    border-color:#2ecc71;
+    width:280px;
+    transition:0.5s;
+}
+
+.loginform input[type="submit"]:hover{
+    background-color:#2ecc71;
+    transition: 0.5s;
+}
+.modal-header h3{
+	color:blue;
+}
+
+.modal-content{
+	background-color:#F9E79F;
+}
+
+.modal-body form{
+	display:block;
+}
+
+.modal-body form .email,.modal-body form .account,.modal-body form .password{
+	margin:30px;
+	width:70%;
+	border-radius:20px;
+	border:2px solid #2ecc71;
+	
+}
+.modal-body form .email:focus,.modal-body form .account:focus,.modal-body form .password:focus{
+	border-color:#5DADE2;
+    width:400px;
+    transition:0.5s;
+}
+.modal-body .btn:hover{
+    background-color:#2ecc71;
+    transition: 0.5s;
+}

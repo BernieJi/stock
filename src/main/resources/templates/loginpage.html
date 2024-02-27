@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>股票登入系統</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- 導入JQuery -->
+    	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <!-- 導入Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+
+    <body>
+        <h1>個人金融系統</h1>
+        <form class="loginform" action="/login" method="post">
+            <h2>Login 登入</h2>
+            <input type="text" name="username" placeholder="請輸入帳號">
+            <input type="password" name="password" placeholder="請輸入密碼">
+            <input type="checkbox" name="remember-me" value="true" />remember me
+            <br />
+            <a style="color:#F7DC6F" type="button" data-bs-toggle="modal" data-bs-target="#registerModal" href="/register.html">還不是會員嗎？點此註冊!</a> 
+            <input type="submit" value="登入">
+         </form> 
+         
+         <div class="modal fade" id="registerModal">
+    		<div class="modal-dialog">
+    			<div class="modal-content">
+			            <div class="modal-header">
+			            	<h3>請填寫以下表格完成註冊</h3>
+			            	<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			            </div>
+			            <div class="modal-body">
+			            	<form action="/register" method="post">
+			            		<div class="form-group">           			    
+						            <input type="text" name="username" class="account form-control" size="50" placeholder="請輸入帳號(八位英文字)" required>						            
+						            <input type="password" name="password" class="password form-control" size="50" placeholder="請輸入密碼(五位數字)" required>
+						            <input type="email" name="email" class="email form-control" size="50" placeholder="請輸入Email">
+									<button id="register" type="submit" class="btn btn-primary">註冊</button>						    
+			            		</div>
+				            </form>
+			            </div>
+			   	</div>    
+	        </div>
+        </div>    
+    </body>
+</html>
