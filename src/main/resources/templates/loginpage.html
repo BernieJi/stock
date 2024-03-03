@@ -10,6 +10,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/style.css">
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
 
     <body>
@@ -20,7 +22,7 @@
             <input type="password" name="password" placeholder="請輸入密碼">
             <input type="checkbox" name="remember-me" value="true" />remember me
             <br />
-            <a style="color:#F7DC6F" type="button" data-bs-toggle="modal" data-bs-target="#registerModal" href="/register.html">還不是會員嗎？點此註冊!</a> 
+            <a style="color:#F7DC6F" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">還不是會員嗎？點此註冊!</a>
             <input type="submit" value="登入">
          </form> 
          
@@ -32,17 +34,54 @@
 			            	<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 			            </div>
 			            <div class="modal-body">
-			            	<form action="/register" method="post">
-			            		<div class="form-group">           			    
-						            <input type="text" name="username" class="account form-control" size="50" placeholder="請輸入帳號(八位英文字)" required>						            
-						            <input type="password" name="password" class="password form-control" size="50" placeholder="請輸入密碼(五位數字)" required>
-						            <input type="email" name="email" class="email form-control" size="50" placeholder="請輸入Email">
-									<button id="register" type="submit" class="btn btn-primary">註冊</button>						    
+<!--			            	<form action="/register" method="post">-->
+                                <form>
+			            		<div class="form-group">
+						            <input type="text" id="register_name" name="username" class="account form-control" size="50" placeholder="請輸入帳號(八位英文字)" required>
+						            <input type="password" id="register_password" name="password" class="password form-control" size="50" placeholder="請輸入密碼(五位數字)" required>
+						            <input type="email" id="register_email" name="email" class="email form-control" size="50" placeholder="請輸入Email">
+									<button id="register" type="submit" class="btn btn-primary">註冊</button>
+
+                                    <script>
+
+                                        let button = document.getElementById("register");
+                                        button.addEventListener('click', function() {
+                                            // 讓表單不要提交資料
+                                            // button.preventDefault();
+                                            let username = document.getElementById("register_name").value;
+                                            let password = document.getElementById("register_password").value;
+                                            let email = document.getElementById("register_email").value;
+
+                                            // 使用axios傳輸資料至後端
+                                            // axios.post('http://localhost:8081/register',user)
+                                            //         .then(res =>{
+                                            //                 console.log(res);
+                                            //             })
+                                            //         .catch(
+                                            //              console.log('axios 發生錯誤惹...')
+                                            //         )
+                                            axios.post('/register', {
+                                                id:878,
+                                                username:username,
+                                                password:password,
+                                                email:email,
+                                                authority:"user"
+                                            })
+                                                .then(function (response) {
+                                                    console.log("收到的回覆:" + response);
+                                                })
+                                                .catch(function (error) {
+                                                    console.log("錯誤囉~~" + error);
+                                                });
+
+                                        });
+
+                                    </script>
 			            		</div>
 				            </form>
 			            </div>
-			   	</div>    
+			   	</div>
 	        </div>
-        </div>    
+        </div>
     </body>
 </html>

@@ -38,6 +38,12 @@ public class LoginController {
 		System.out.println("使用者資訊:" + authentication.toString());
 		return "index";
 	}
+
+	// 登入失敗
+	@RequestMapping("/registerpage")
+	public String registerpage() {
+		return "z8 ";
+	}
 	
 	// 登入成功
 	@PostMapping("/index")
@@ -56,27 +62,29 @@ public class LoginController {
 	}
 	
 	// 註冊頁面
-	@PostMapping("/register")
-	public ResponseEntity<Object> registerSuccesss(@Valid @ModelAttribute CustomUser users,BindingResult result,Model model) {
+	@PostMapping(path="/register",produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<Object> register(@RequestBody CustomUser user) {
 		ResponseEntity<Object> response = null;
+		System.out.println("傳進來的用戶資訊:" + user);
 		try {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			String encodedPassword = encoder.encode(users.getPassword());
-			users.setPassword(encodedPassword);
+			String encodedPassword = encoder.encode(user.getPassword());
+			user.setPassword(encodedPassword);
 			// 一般註冊會員authority設定為user
-			users.setAuthority("user");
-			userRepository.updateUserInfo(5,users.getUsername(), users.getPassword(), users.getEmail(), users.getAuthority().toString());
+//			user.setAuthority("user");
+			userRepository.addUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getAuthority().toString());
 			Message msg = new Message();
 			msg.setCode(200);
-			msg.setMsg(String.format("此帳號:%s已成功註冊 請按上一頁登入帳號",users.getUsername()));
-			response = new ResponseEntity<>(msg, HttpStatus.OK);
+			msg.setMsg(String.format("此帳號:%s已成功註冊 請按上一頁登入帳號",user.getUsername()));
+			return new ResponseEntity<>(msg, HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
 			Message msg = new Message();
 			msg.setCode(500);
-			msg.setMsg(String.format("此帳號:%s已使用過 請按上一頁重新註冊帳號",users.getUsername()));
-			response = new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);
+			msg.setMsg(String.format("此帳號:%s已使用過 請按上一頁重新註冊帳號",user.getUsername()));
+			return new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);
 		}
-		return response;
 	}
 		
 }
