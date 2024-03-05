@@ -34,8 +34,7 @@
 			            	<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 			            </div>
 			            <div class="modal-body">
-<!--			            	<form action="/register" method="post">-->
-                                <form>
+			            	<form action="/register" method="post">
 			            		<div class="form-group">
 						            <input type="text" id="register_name" name="username" class="account form-control" size="50" placeholder="請輸入帳號(八位英文字)" required>
 						            <input type="password" id="register_password" name="password" class="password form-control" size="50" placeholder="請輸入密碼(五位數字)" required>
@@ -43,23 +42,14 @@
 									<button id="register" type="submit" class="btn btn-primary">註冊</button>
 
                                     <script>
-
                                         let button = document.getElementById("register");
-                                        button.addEventListener('click', function() {
+                                        button.addEventListener('click', function(event) {
                                             // 讓表單不要提交資料
-                                            // button.preventDefault();
+                                            event.preventDefault();
                                             let username = document.getElementById("register_name").value;
                                             let password = document.getElementById("register_password").value;
                                             let email = document.getElementById("register_email").value;
 
-                                            // 使用axios傳輸資料至後端
-                                            // axios.post('http://localhost:8081/register',user)
-                                            //         .then(res =>{
-                                            //                 console.log(res);
-                                            //             })
-                                            //         .catch(
-                                            //              console.log('axios 發生錯誤惹...')
-                                            //         )
                                             axios.post('/register', {
                                                 id:878,
                                                 username:username,
@@ -68,12 +58,39 @@
                                                 authority:"user"
                                             })
                                                 .then(function (response) {
-                                                    console.log("收到的回覆:" + response);
+                                                    // console.log("收到的回覆:" + response.data.code);
+                                                    if (response.data.code === "200") {
+                                                        alert("註冊成功，歡迎登入！")
+                                                        window.location.href = "/loginpage";
+                                                    } else {
+                                                        alert("註冊失敗，請重新註冊！")
+                                                        window.location.href = "/loginpage";
+                                                    }
                                                 })
                                                 .catch(function (error) {
-                                                    console.log("錯誤囉~~" + error);
+                                                    console.log("錯誤囉~~" + JSON.stringify(error));
                                                 });
 
+                                        });
+
+                                        // 檢查是否已有相同的username
+                                        let input = document.getElementById("register_name");
+                                        input.addEventListener('blur',function(){
+
+                                            let username = input.value;
+                                            console.log("使用者輸入的名字為:" + username)
+                                            axios.get('/check?username=' + username)
+                                                .then(function (response) {
+                                                    // console.log("收到的回覆:" + response.data.code);
+                                                    if (response.data.code === "200") {
+                                                        console.log("帳號可建立")
+                                                    } else {
+                                                        console.log("帳號已存在，請嘗試其他帳號")
+                                                    }
+                                                })
+                                                .catch(function (error) {
+                                                    console.log(error);
+                                                });
                                         });
 
                                     </script>

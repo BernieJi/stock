@@ -1,5 +1,6 @@
 package com.boin.controller;
 
+import com.boin.common.BaseResponse;
 import com.boin.entity.CustomUser;
 import com.boin.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -16,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.boin.entity.Message;
+
+import java.util.Objects;
 
 @Controller
 public class LoginController {
@@ -64,27 +67,43 @@ public class LoginController {
 	// 註冊頁面
 	@PostMapping(path="/register",produces = "application/json")
 	@ResponseBody
-	public ResponseEntity<Object> register(@RequestBody CustomUser user) {
-		ResponseEntity<Object> response = null;
-		System.out.println("傳進來的用戶資訊:" + user);
+	public ResponseEntity<BaseResponse> register(@RequestBody CustomUser user) {
+		//System.out.println("傳進來的用戶資訊:" + user);
 		try {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String encodedPassword = encoder.encode(user.getPassword());
 			user.setPassword(encodedPassword);
 			// 一般註冊會員authority設定為user
-//			user.setAuthority("user");
+            // user.setAuthority("user");
 			userRepository.addUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getAuthority().toString());
-			Message msg = new Message();
-			msg.setCode(200);
-			msg.setMsg(String.format("此帳號:%s已成功註冊 請按上一頁登入帳號",user.getUsername()));
-			return new ResponseEntity<>(msg, HttpStatus.OK);
+			BaseResponse res = new BaseResponse();
+			res.setCode("200");
+			res.setMessage(String.format("此帳號:%s已成功註冊 請按上一頁登入帳號",user.getUsername()));
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message msg = new Message();
-			msg.setCode(500);
-			msg.setMsg(String.format("此帳號:%s已使用過 請按上一頁重新註冊帳號",user.getUsername()));
-			return new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);
+			BaseResponse res = new BaseResponse();
+			res.setCode("500");
+			res.setMessage(String.format("此帳號:%s已使用過 請按上一頁重新註冊帳號",user.getUsername()));
+			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
 		}
+
+
 	}
-		
+
+	// 註冊頁面中查詢是否已有相同username
+	@RequestMapping(path="/check")
+	@ResponseBody
+	public ResponseEntity<BaseResponse> check(String username) {
+		System.out.println("有進來檢查函數，名稱為:" + username);
+		CustomUser user = userRepository.getUserByUserName(username);
+		if (Objects.isNull(user)) {
+			BaseResponse res = new BaseResponse();
+			res.setCode("200");
+			res.setMessage("此帳號允許建立");
+			return new ResponseEntity<>(res, HttpStatus.OK);
+		}
+		BaseResponse res = new BaseResponse("500","該帳號已存在，請重新輸入！");
+		return new ResponseEntity<>(res,HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

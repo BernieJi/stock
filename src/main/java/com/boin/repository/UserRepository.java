@@ -2,6 +2,7 @@ package com.boin.repository;
 
 import com.boin.entity.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -48,7 +49,9 @@ public class UserRepository {
                 where username = ?
                 """;
         try {
-            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CustomUser.class),username);
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CustomUser.class), username);
+        } catch (EmptyResultDataAccessException ex){
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
         }
