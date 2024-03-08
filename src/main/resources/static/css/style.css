@@ -88,3 +88,13 @@ h1{
     background-color:#2ecc71;
     transition: 0.5s;
 }
+.form-group {
+    position: relative;
+}
+
+#check_name {
+    position: absolute;
+    left: 80%;
+    top: 0;
+    margin-left: 10px; /* 调整间距 */
+}

@@ -2,9 +2,8 @@ package com.boin.restController;
 
 import java.util.List;
 
-import com.boin.entity.CustomUser;
+import com.boin.entity.User;
 import com.boin.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +25,8 @@ public class AdminRestController {
 	// 列出所有用戶資訊
 	@Operation(summary = "列出所有Users資訊")
 	@GetMapping("/admininfo/rawdata/all")
-	public List<CustomUser> allUsers(){
-		List<CustomUser> usersz = userRepository.getAllUsersInfo();
+	public List<User> allUsers(){
+		List<User> usersz = userRepository.getAllUsersInfo();
 		return usersz;
 		}
 		
@@ -35,7 +34,7 @@ public class AdminRestController {
 	@Operation(summary = "根據username給予使用者admin權限")
 	@PutMapping("/admininfo/rawdata/{username}/giveauthority")
 	public String authorizeAdmin(@PathVariable("username") String username){
-		CustomUser users = userRepository.getUserByUserName(username);
+		User users = userRepository.getUserByUserName(username);
 		// users.setAuthority("users,admin");
 		// userRepository.(users);
 		return "授予權限成功";

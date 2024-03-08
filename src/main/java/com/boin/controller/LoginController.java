@@ -1,10 +1,14 @@
 package com.boin.controller;
 
 import com.boin.common.BaseResponse;
-import com.boin.entity.CustomUser;
+import com.boin.config.JwtService;
+import com.boin.entity.Authentication.AuthenticationResponse;
+import com.boin.entity.Authentication.LoginRequest;
+import com.boin.entity.Authentication.RegisterRequest;
+import com.boin.entity.User;
 import com.boin.repository.UserRepository;
-import jakarta.validation.Valid;
 
+import com.boin.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import com.boin.entity.Message;
 
 import java.util.Objects;
 
@@ -25,6 +26,12 @@ public class LoginController {
 	
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private JwtService jwtService;
+
+	@Autowired
+	private AuthenticationService authenticationService;
 	
 	// 登入畫面
 	@GetMapping("/loginpage")
@@ -34,23 +41,17 @@ public class LoginController {
 
 	// 登入
 	@PostMapping("/login")
-	public String login(@ModelAttribute CustomUser users, Model model) {
-		model.addAttribute("users",users);
-		// 獲取當前用戶的認證信息
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println("使用者資訊:" + authentication.toString());
-		return "index";
-	}
-
-	// 登入失敗
-	@RequestMapping("/registerpage")
-	public String registerpage() {
-		return "z8 ";
+	@ResponseBody
+	public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request) {
+		System.out.println("收到的登入資訊為:" + request);
+		User user = userRepository.getUserByUserName(request.getUsername());
+		String jwt = jwtService.generateToken(user);
+		return new ResponseEntity<>(null,HttpStatus.OK);
 	}
 	
 	// 登入成功
 	@PostMapping("/index")
-	public String index(@ModelAttribute CustomUser users, Model model) {
+	public String index(@ModelAttribute User users, Model model) {
 		model.addAttribute("users",users);
 		// 獲取當前用戶的認證信息
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -67,36 +68,16 @@ public class LoginController {
 	// 註冊頁面
 	@PostMapping(path="/register",produces = "application/json")
 	@ResponseBody
-	public ResponseEntity<BaseResponse> register(@RequestBody CustomUser user) {
-		//System.out.println("傳進來的用戶資訊:" + user);
-		try {
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			String encodedPassword = encoder.encode(user.getPassword());
-			user.setPassword(encodedPassword);
-			// 一般註冊會員authority設定為user
-            // user.setAuthority("user");
-			userRepository.addUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getAuthority().toString());
-			BaseResponse res = new BaseResponse();
-			res.setCode("200");
-			res.setMessage(String.format("此帳號:%s已成功註冊 請按上一頁登入帳號",user.getUsername()));
-			return new ResponseEntity<>(res, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			BaseResponse res = new BaseResponse();
-			res.setCode("500");
-			res.setMessage(String.format("此帳號:%s已使用過 請按上一頁重新註冊帳號",user.getUsername()));
-			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
-		}
-
-
+	public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+		return authenticationService.register(request);
 	}
 
 	// 註冊頁面中查詢是否已有相同username
-	@RequestMapping(path="/check")
+	@GetMapping(path="/check",produces = "application/json")
 	@ResponseBody
-	public ResponseEntity<BaseResponse> check(String username) {
-		System.out.println("有進來檢查函數，名稱為:" + username);
-		CustomUser user = userRepository.getUserByUserName(username);
+	public ResponseEntity<BaseResponse> check(@RequestParam(value = "username") String username) {
+		// System.out.println("有進來檢查函數，名稱為:" + username);
+		User user = userRepository.getUserByUserName(username);
 		if (Objects.isNull(user)) {
 			BaseResponse res = new BaseResponse();
 			res.setCode("200");

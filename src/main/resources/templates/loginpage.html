@@ -18,12 +18,13 @@
         <h1>個人金融系統</h1>
         <form class="loginform" action="/login" method="post">
             <h2>Login 登入</h2>
-            <input type="text" name="username" placeholder="請輸入帳號">
-            <input type="password" name="password" placeholder="請輸入密碼">
+            <input type="text" id="login_username" name="username" placeholder="請輸入帳號">
+            <input type="password" id="login_password" name="password" placeholder="請輸入密碼">
             <input type="checkbox" name="remember-me" value="true" />remember me
             <br />
             <a style="color:#F7DC6F" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">還不是會員嗎？點此註冊!</a>
-            <input type="submit" value="登入">
+<!--            <input type="submit" value="登入">-->
+            <button id="login" type="submit" class="btn btn-primary">登入</button>
          </form> 
          
          <div class="modal fade" id="registerModal">
@@ -37,13 +38,41 @@
 			            	<form action="/register" method="post">
 			            		<div class="form-group">
 						            <input type="text" id="register_name" name="username" class="account form-control" size="50" placeholder="請輸入帳號(八位英文字)" required>
+                                    <span id="check_name" style="display: none;">123</span>
 						            <input type="password" id="register_password" name="password" class="password form-control" size="50" placeholder="請輸入密碼(五位數字)" required>
 						            <input type="email" id="register_email" name="email" class="email form-control" size="50" placeholder="請輸入Email">
 									<button id="register" type="submit" class="btn btn-primary">註冊</button>
 
                                     <script>
-                                        let button = document.getElementById("register");
-                                        button.addEventListener('click', function(event) {
+                                        // 登入
+                                        let loginbButton = document.getElementById("login");
+                                        loginbButton.addEventListener('click', function(event) {
+                                            // 讓表單不要提交資料
+                                            event.preventDefault();
+                                            let username = document.getElementById("login_username").value;
+                                            let password = document.getElementById("login_password").value;
+
+                                            axios.post('/login', {
+                                                username:username,
+                                                password:password,
+                                            })
+                                                .then(function (response) {
+                                                    // console.log("收到的回覆:" + response.data.code);
+                                                    if (response.data.code === "200") {
+                                                        window.location.href = "/index";
+                                                    } else {
+                                                        alert("登入失敗，請重新輸入！")
+                                                        window.location.href = "/loginpage";
+                                                    }
+                                                })
+                                                .catch(function (error) {
+                                                    console.log("錯誤囉~~" + JSON.stringify(error));
+                                                });
+
+                                        });
+                                        // 註冊帳號
+                                        let registerButton = document.getElementById("register");
+                                        registerButton.addEventListener('click', function(event) {
                                             // 讓表單不要提交資料
                                             event.preventDefault();
                                             let username = document.getElementById("register_name").value;
@@ -55,7 +84,7 @@
                                                 username:username,
                                                 password:password,
                                                 email:email,
-                                                authority:"user"
+                                                role:"user"
                                             })
                                                 .then(function (response) {
                                                     // console.log("收到的回覆:" + response.data.code);
@@ -81,11 +110,15 @@
                                             console.log("使用者輸入的名字為:" + username)
                                             axios.get('/check?username=' + username)
                                                 .then(function (response) {
-                                                    // console.log("收到的回覆:" + response.data.code);
+                                                    let show = document.getElementById("check_name");
+                                                    show.style.display = "inline";
                                                     if (response.data.code === "200") {
                                                         console.log("帳號可建立")
+                                                        show.textContent = "帳號可建立";
                                                     } else {
                                                         console.log("帳號已存在，請嘗試其他帳號")
+                                                        show.style.display = "inline";
+                                                        show.textContent = "帳號已存在，請嘗試其他帳號";
                                                     }
                                                 })
                                                 .catch(function (error) {

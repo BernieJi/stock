@@ -2,9 +2,8 @@ package com.boin.controller;
 
 import java.util.List;
 
-import com.boin.entity.CustomUser;
+import com.boin.entity.User;
 import com.boin.repository.UserRepository;
-import com.boin.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,13 +20,10 @@ public class AdminController {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@Autowired
-	private UsersService usersService;
-	
 	// 列出所有用戶資訊
 	@RequestMapping("/index/adminpage")
-	public String admin(@ModelAttribute CustomUser users, Model model){
-		List<CustomUser> usersz = userRepository.getAllUsersInfo();
+	public String admin(@ModelAttribute User users, Model model){
+		List<User> usersz = userRepository.getAllUsersInfo();
 		model.addAttribute("_method","PUT");
 		model.addAttribute("usersz",usersz);
 		return "adminpage";

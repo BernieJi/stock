@@ -1,6 +1,7 @@
 package com.boin.restController;
 
-import com.boin.entity.CustomUser;
+import com.boin.entity.Role;
+import com.boin.entity.User;
 import com.boin.entity.Message;
 import com.boin.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -20,7 +21,7 @@ public class LoginRestController {
 	
 	// 註冊頁面
 	@PostMapping("/register1")
-	public ResponseEntity<Object> register(@Valid CustomUser user) {
+	public ResponseEntity<Object> register(@Valid User user) {
 		// 先檢查傳進來的東西是否為空
 		if(Objects.isNull(user)){
 			Message msg = new Message();
@@ -34,9 +35,9 @@ public class LoginRestController {
 			String encodedPassword = encoder.encode(user.getPassword());
 			user.setPassword(encodedPassword);
 			// 一般註冊會員authority設定為user
-			user.setAuthority("user");
+			user.setRole(Role.USER.getString());
 			// 數據庫新增資料
-			userRepository.addUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getAuthority());
+			userRepository.addUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getRole().toString());
 			Message msg = new Message();
 			msg.setCode(200);
 			msg.setMsg(String.format("此帳號:%s已成功註冊 請按上一頁登入帳號",user.getUsername()));

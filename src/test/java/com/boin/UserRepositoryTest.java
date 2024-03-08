@@ -18,4 +18,10 @@ class UserRepositoryTest {
         System.out.println(res);
         Assertions.assertNotNull(res);
     }
+
+    @Test
+    void findByUsernameTest(){
+        var res = userRepository.getUserByUserName("boin");
+        System.out.println(res);
+    }
 }

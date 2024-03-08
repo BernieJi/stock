@@ -1,6 +1,6 @@
 package com.boin.repository;
 
-import com.boin.entity.CustomUser;
+import com.boin.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -8,12 +8,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepository {
-
-    @Autowired
-    private final JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     public UserRepository(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
@@ -24,13 +23,13 @@ public class UserRepository {
     *  查詢所有會員資料
     *
     */
-    public List<CustomUser> getAllUsersInfo() {
+    public List<User> getAllUsersInfo() {
         final String sql = """
-                SELECT id, username, password, email, authority
+                SELECT id, username, password, email, role
                 FROM user
                 """;
         try {
-            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CustomUser.class));
+            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,14 +41,14 @@ public class UserRepository {
      *  根據username查詢會員資料
      *
      */
-    public CustomUser getUserByUserName(String username) {
+    public User getUserByUserName(String username) {
         final String sql = """
-                SELECT id, username, password, email, authority
+                SELECT id, username, password, email, role
                 FROM user
                 where username = ?
                 """;
         try {
-            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CustomUser.class), username);
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), username);
         } catch (EmptyResultDataAccessException ex){
             return null;
         } catch (Exception e) {
@@ -63,14 +62,14 @@ public class UserRepository {
      *  根據id查詢會員資料
      *
      */
-    public CustomUser getUserById(Integer id) {
+    public User getUserById(Integer id) {
         final String sql = """
-                SELECT id, username, password, email, authority
+                SELECT id, username, password, email, role
                 FROM user
                 where id = ?
                 """;
         try {
-            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CustomUser.class),id);
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class),id);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,13 +81,13 @@ public class UserRepository {
      *  新增會員資料
      *
      */
-    public Integer addUser(String username, String password, String email, String authority) {
+    public Integer addUser(String username, String password, String email, String role) {
         final String sql = """
-                INSERT into user (username, password, email, authority) 
+                INSERT into user (username, password, email, role) 
                 VALUES (?, ?, ?, ?) 
                 """;
         try {
-            return jdbcTemplate.update(sql, username, password, email, authority);
+            return jdbcTemplate.update(sql, username, password, email, role);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,13 +99,13 @@ public class UserRepository {
      *  修改會員資料
      *
      */
-    public Integer updateUserInfo(Integer id, String username, String password, String email, String authority) {
+    public Integer updateUserInfo(Integer id, String username, String password, String email, String role) {
         final String sql = """
-                UPDATE user  SET username = ?, password = ?, email = ?, authority = ? 
+                UPDATE user  SET username = ?, password = ?, email = ?, role = ? 
                 WHERE id = ?
                 """;
         try {
-            return jdbcTemplate.update(sql, username, password, email, authority, id);
+            return jdbcTemplate.update(sql, username, password, email, role, id);
         } catch (Exception e) {
             e.printStackTrace();
         }
