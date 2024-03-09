@@ -9,6 +9,7 @@ import com.boin.entity.User;
 import com.boin.repository.UserRepository;
 
 import com.boin.service.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,62 +22,38 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
-@Controller
+@RestController
+@RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class LoginController {
-	
-	@Autowired
-	private UserRepository userRepository;
 
-	@Autowired
-	private JwtService jwtService;
-
-	@Autowired
-	private AuthenticationService authenticationService;
-	
-	// 登入畫面
-	@GetMapping("/loginpage")
-	public String loginpage() {
-		return "loginpage";
-	}
+	private final UserRepository userRepository;
+	private final AuthenticationService authenticationService;
 
 	// 登入
-	@PostMapping("/login")
-	@ResponseBody
+	@PostMapping(path="/login", produces = "application/json")
 	public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request) {
-		System.out.println("收到的登入資訊為:" + request);
-		User user = userRepository.getUserByUserName(request.getUsername());
-		String jwt = jwtService.generateToken(user);
-		return new ResponseEntity<>(null,HttpStatus.OK);
+		return authenticationService.login(request);
 	}
 	
-	// 登入成功
-	@PostMapping("/index")
-	public String index(@ModelAttribute User users, Model model) {
-		model.addAttribute("users",users);
+	// 首頁
+	@GetMapping("/getIndex")
+	public String index() {
 		// 獲取當前用戶的認證信息
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println("使用者資訊:" + authentication.toString());
-		return "index";
-	}
-
-	// 登入失敗
-	@RequestMapping("/fail")
-	public String fail() {
-		return "fail";
+		return "登入成功 進來首頁了";
 	}
 	
 	// 註冊頁面
-	@PostMapping(path="/register",produces = "application/json")
-	@ResponseBody
+	@PostMapping(path="/register", produces = "application/json")
 	public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
 		return authenticationService.register(request);
 	}
 
 	// 註冊頁面中查詢是否已有相同username
 	@GetMapping(path="/check",produces = "application/json")
-	@ResponseBody
 	public ResponseEntity<BaseResponse> check(@RequestParam(value = "username") String username) {
-		// System.out.println("有進來檢查函數，名稱為:" + username);
 		User user = userRepository.getUserByUserName(username);
 		if (Objects.isNull(user)) {
 			BaseResponse res = new BaseResponse();
