@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.themeleaf.org">
+    <head>
+        <title>Stock Information</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- 導入JQuery -->
+    	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <!-- 導入Table CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
+		<!-- 導入Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+		<!-- 導入FontAwesome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+	</head>
+
+    <body th:object="${ stocks}">
+    	
+    	<!-- style="background-image:url(../images/systembackground.jpg);background-size: cover" -->
+		
+		<div style="position:relative;top:50px;left:50px">
+			<a href="/index">按此回到首頁 <i class="fa-solid fa-house"></i></a>
+			<form class="search">
+				<input type="text" id="myInput" placeholder="請輸入股票代號查詢 例:0050" style="width:250px">
+			</form>
+
+			
+			<table id="myTable" class="pure-table pure-table-bordered">
+				<thead>
+					<tr>
+						<th>序號</th>
+						<th>股票代號</th>
+						<th>股票名稱</th>
+						<th>交易數量</th>
+						<th>股票開盤價</th>
+						<th>股票收盤價</th>
+						<th>當日最高價</th>
+						<th>當日最低價</th>
+						<th>詳細資訊</th>		
+					</tr>
+				</thead>
+
+				<tbody id="myBody">
+					<tr th:each="stock,stat: ${stocks}">
+						<td th:text="${stat.count}"></td>
+						<td th:text="${stock.Code}" id="myCode"></td>
+						<td th:text="${stock.Name}"></td>
+						<td th:text="${stock.TradeVolume}"></td>
+						<td th:text="${stock.OpeningPrice}"></td>
+						<td th:text="${stock.ClosingPrice}"></td>
+						<td th:text="${stock.HighestPrice}"></td>
+						<td th:text="${stock.LowestPrice}"></td>
+						<td>
+							<a type="button" th:href="@{/index/stock/info/{stockcode}(stockcode=${stock.Code})}">詳細資訊</a>
+						</td>
+						
+					</tr>	
+				</tbody>
+				
+			</table>
+
+			<script>
+				$(document).ready(function(){
+					$("#myInput").on("keyup",function(){
+						var value = $(this).val();
+					
+					$("#myBody tr").filter(function(){
+						$(this).toggle($(this).text().indexOf(value) > -1)
+						});
+					});
+				});
+
+			</script>
+
+        </div>             	
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+       	
+    </body>
+</html>

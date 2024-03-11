@@ -5,17 +5,11 @@ import java.util.List;
 import com.boin.entity.User;
 import com.boin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-@Tag(name = "使用者Api",description = "關於使用者的功能")
 @RestController
+@RequestMapping("api/v1/user")
 public class UsersRestController {
 	
 	@Autowired
@@ -23,16 +17,16 @@ public class UsersRestController {
 	
 	// 查詢所有用戶資訊
 	@Operation(summary = "查詢所有用戶的資訊")
-	@GetMapping(path="/usersinfo/rawdata/all",produces="application/json")
+	@GetMapping(path="/usersinfo/all",produces="application/json")
 	public List<User> allUsers(){
 		List<User> customUsers = userRepository.getAllUsersInfo();
 		return customUsers;
 		}
 	
 	// 根據usersName查詢用戶資訊
-	@Operation(summary = "根據usersName查詢用戶資訊")
-	@GetMapping(path="/usersinfo/rawdata/{usersname}",produces="application/json")
-	public User usersQueryByUserName(@PathVariable("usersname")String username){
+	@Operation(summary = "根據userName查詢用戶資訊")
+	@GetMapping(path="/{username}",produces="application/json")
+	public User usersQueryByUserName(@PathVariable("username")String username){
 		User user = userRepository.getUserByUserName(username);
 		return user;
 	}

@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,19 +19,18 @@ import java.io.IOException;
 import java.util.Objects;
 
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private final JwtService jwtService;
 
-    @Autowired
-    private JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
     @Override
     public void doFilterInternal(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response,@NonNull FilterChain filterChain)
             throws IOException, ServletException {
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String username;
+        String authHeader = request.getHeader("Authorization");
+        String jwt;
+        String username;
         if(Objects.isNull(authHeader) || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
             return;
@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7); // Bearer <
         username = jwtService.extractUsername(jwt);
         if(!Objects.isNull(username) && Objects.isNull(SecurityContextHolder.getContext().getAuthentication())){
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             if(jwtService.isTokenValid(jwt, userDetails)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,

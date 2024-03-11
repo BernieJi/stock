@@ -61,7 +61,8 @@
                                                         let jwt = "Bearer " + response.data.token;
                                                         console.log("jwt取出來為:" + jwt);
                                                         // 將jwt 儲存在localStorage
-                                                        localStorage.setItem("Authorization",jwt);
+                                                        sessionStorage.setItem("Authorization",jwt);
+                                                        sessionStorage.setItem("username",username);
                                                         window.location.href = "/index";
                                                     } else {
                                                         alert("登入失敗，請重新輸入！")
@@ -95,7 +96,9 @@
                                                         alert("註冊成功，請輸入帳號密碼登入！")
                                                         let jwt = "Bearer " + response.data.token;
                                                         // 將jwt 儲存
-                                                        localStorage.setItem("Authorization",jwt);
+                                                        sessionStorage.setItem("Authorization",jwt);
+                                                        localStorage.clear()
+                                                        sessionStorage.setItem("username", username);
                                                         // 畫面倒回登入頁面
                                                         window.location.href = "/loginpage";
                                                     } else {

@@ -33,7 +33,7 @@
 	    					<a href="/index">首頁Home <i class="fa-solid fa-house-chimney"></i></a>
 	    				</li>
 	    				<li>
-	    					<a href="/index/stock">股票 <i class="fa-solid fa-arrow-trend-up"></i></a>
+	    					<a href="/html/stock.html">股票 <i class="fa-solid fa-arrow-trend-up"></i></a>
 	    				</li>
 	    				<li>
 	    					<a href="/index/watchlist">個人追蹤列表 <i class="fa-solid fa-wallet"></i></a>
@@ -45,7 +45,7 @@
 	    					<a sec:authorize="hasAuthority('admin')" href="/index/adminpage">管理員頁面 <i class="fa-solid fa-people-roof"></i></a>
 	    				</li>
 	    				<li>
-	    					<a sec:authorize="hasAnyAuthority('admin','user')" href="/logout">登出 <i class="fa-solid fa-right-from-bracket"></i></a>
+	    					<a href="/logout">登出 <i class="fa-solid fa-right-from-bracket"></i></a>
 	    				</li>
 	    			</ul>
 	    		</nav>
@@ -61,21 +61,24 @@
 						<li>客戶端地址：<span sec:authentication="details.remoteAddress"></span></li>
 						<li>Session Id:<span sec:authentication="details.sessionId"></span></li>
 						<li>現在時間：<span id="time"></span></li>
-
-						<script type="text/javascript">
-							var loginDate = new Date();
-							var loginTime = loginDate.toLocaleString();
-							document.getElementById('time').innerHTML=loginTime
-						</script>
 					</ul>
 											
 					<script type="text/javascript">
 						var loginTime = new Date().toLocaleString();
 						document.getElementById('time').innerHTML=loginTime
 
-						axios.get('http://localhost:8081/admininfo/rawdata/all')
+						let jwt = sessionStorage.getItem("Authorization");
+						let username = sessionStorage.getItem("username")
+
+						axios.get('http://localhost:8081/api/v1/user/' + username,{
+							headers:{
+								'Authorization' : jwt
+							}
+						})
 								.then(res =>{
 									console.log(res);
+									let spanTags = document.getElementsByTagName("span")[0];
+									spanTags.innerHTML = res.data.username;
 								})
 								.catch(
 									console.log('axios 發生錯誤惹...')

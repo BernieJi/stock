@@ -1,7 +1,5 @@
 package com.boin.config;
 
-import com.boin.handle.AuthenticationFailureHandlerImpl;
-import com.boin.handle.MyAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,9 +29,8 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		// 授權url
-		//String[] permitted = {"/login","/register","/check","/fail","/css/**","/images/**","/js/**","/usersinfo/**"};
-		String[] permitted = {"/api/v1/auth/**","/loginpage","/index","/fail","/css/**","/images/**","/js/**"};
+		// White Lists
+		String[] permitted = {"/api/v1/auth/**","/loginpage","/fail","/index","/html/**","/css/**","/images/**","/js/**"};
 		http
 				.csrf()
 				.disable()
