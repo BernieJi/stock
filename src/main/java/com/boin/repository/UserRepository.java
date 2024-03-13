@@ -99,13 +99,13 @@ public class UserRepository {
      *  修改會員資料
      *
      */
-    public Integer updateUserInfo(Integer id, String username, String password, String email, String role) {
+    public Integer updateUserInfo(String username, String email) {
         final String sql = """
-                UPDATE user  SET username = ?, password = ?, email = ?, role = ? 
-                WHERE id = ?
+                UPDATE user  SET email = ? 
+                WHERE username = ?
                 """;
         try {
-            return jdbcTemplate.update(sql, username, password, email, role, id);
+            return jdbcTemplate.update(sql, email, username);
         } catch (Exception e) {
             e.printStackTrace();
         }

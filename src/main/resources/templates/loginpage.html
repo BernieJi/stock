@@ -5,25 +5,26 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- 導入JQuery -->
-    	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!-- 導入Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="css/style.css">
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <!-- 導入CSS file-->
+        <link rel="stylesheet" href="/css/loginpage.css">
+        <!-- 導入Axios -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <!-- 導入JS file-->
+        <script type="text/javascript" src="/js/loginpage.js"></script>
     </head>
 
     <body>
         <h1>個人金融系統</h1>
-        <form class="loginform" action="/login" method="post">
+        <form class="loginform">
             <h2>Login 登入</h2>
             <input type="text" id="login_username" name="username" placeholder="請輸入帳號">
             <input type="password" id="login_password" name="password" placeholder="請輸入密碼">
-            <input type="checkbox" name="remember-me" value="true" />remember me
-            <br />
-            <a style="color:#F7DC6F" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">還不是會員嗎？點此註冊!</a>
-<!--            <input type="submit" value="登入">-->
+<!--            <input type="checkbox" name="remember-me" value="true" />remember me<br/>-->
+            <a style="color:#F7DC6F" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">還不是會員嗎？點此註冊!</a><br/>
             <button id="login" type="submit" class="btn btn-primary">登入</button>
          </form> 
          
@@ -35,104 +36,13 @@
 			            	<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 			            </div>
 			            <div class="modal-body">
-			            	<form action="/register" method="post">
+                            <form>
 			            		<div class="form-group">
 						            <input type="text" id="register_name" name="username" class="account form-control" size="50" placeholder="請輸入帳號(八位英文字)" required>
-                                    <span id="check_name" style="display: none;">123</span>
+                                    <span id="check_name" style="display: none;"></span>
 						            <input type="password" id="register_password" name="password" class="password form-control" size="50" placeholder="請輸入密碼(五位數字)" required>
 						            <input type="email" id="register_email" name="email" class="email form-control" size="50" placeholder="請輸入Email">
 									<button id="register" type="submit" class="btn btn-primary">註冊</button>
-
-                                    <script>
-                                        // 登入
-                                        let loginbButton = document.getElementById("login");
-                                        loginbButton.addEventListener('click', function(event) {
-                                            // 讓表單不要提交資料
-                                            event.preventDefault();
-                                            let username = document.getElementById("login_username").value;
-                                            let password = document.getElementById("login_password").value;
-
-                                            axios.post('/api/v1/auth/login', {
-                                                username:username,
-                                                password:password,
-                                            })
-                                                .then(function (response) {
-                                                    if (response.data.code === "200") {
-                                                        let jwt = "Bearer " + response.data.token;
-                                                        console.log("jwt取出來為:" + jwt);
-                                                        // 將jwt 儲存在localStorage
-                                                        sessionStorage.setItem("Authorization",jwt);
-                                                        sessionStorage.setItem("username",username);
-                                                        window.location.href = "/index";
-                                                    } else {
-                                                        alert("登入失敗，請重新輸入！")
-                                                        window.location.href = "/loginpage";
-                                                    }
-                                                })
-                                                .catch(function (error) {
-                                                    // console.log("發生錯誤！" + JSON.stringify(error));
-                                                });
-
-                                        });
-
-                                        // 註冊帳號
-                                        let registerButton = document.getElementById("register");
-                                        registerButton.addEventListener('click', function(event) {
-                                            // 讓表單不要提交資料
-                                            event.preventDefault();
-                                            let username = document.getElementById("register_name").value;
-                                            let password = document.getElementById("register_password").value;
-                                            let email = document.getElementById("register_email").value;
-
-                                            axios.post('/api/v1/auth/register', {
-                                                id:1,
-                                                username:username,
-                                                password:password,
-                                                email:email,
-                                                role:"user"
-                                            })
-                                                .then(function (response) {
-                                                    if (response.data.code === "200") {
-                                                        alert("註冊成功，請輸入帳號密碼登入！")
-                                                        let jwt = "Bearer " + response.data.token;
-                                                        // 將jwt 儲存
-                                                        sessionStorage.setItem("Authorization",jwt);
-                                                        localStorage.clear()
-                                                        sessionStorage.setItem("username", username);
-                                                        // 畫面倒回登入頁面
-                                                        window.location.href = "/loginpage";
-                                                    } else {
-                                                        alert("註冊失敗，請重新註冊！")
-                                                        window.location.href = "/loginpage";
-                                                    }
-                                                })
-                                                .catch(function (error) {
-                                                    // console.log("發生錯誤！！" + JSON.stringify(error));
-                                                });
-
-                                        });
-
-                                        // 檢查是否已有相同的username
-                                        let input = document.getElementById("register_name");
-                                        input.addEventListener('blur',function(){
-                                            let username = input.value;
-                                            axios.get('/check?username=' + username)
-                                                .then(function (response) {
-                                                    let show = document.getElementById("check_name");
-                                                    if (response.data.code === "200") {
-                                                        show.style.display = "inline";
-                                                        show.textContent = "帳號可建立";
-                                                    } else {
-                                                        show.style.display = "inline";
-                                                        show.textContent = "帳號已存在，請嘗試其他帳號";
-                                                    }
-                                                })
-                                                .catch(function (error) {
-                                                    // console.log(error);
-                                                });
-                                        });
-
-                                    </script>
 			            		</div>
 				            </form>
 			            </div>

@@ -9,7 +9,6 @@ h1{
     text-align:center;
     font-family: Roboto;
     font-size: 50px;
-    
 }
 
 .loginform{
@@ -50,11 +49,12 @@ h1{
     cursor:pointer;
 }
 
-.loginform input[type="text"]:focus,.loginform input[type="password"]:focus{
-    border-color:#2ecc71;
-    width:280px;
-    transition:0.5s;
-}
+/* 登入欄選取會有動畫 */
+/*.loginform input[type="text"]:focus,.loginform input[type="password"]:focus{*/
+/*    border-color:#2ecc71;*/
+/*    width:280px;*/
+/*    transition:0.5s;*/
+/*}*/
 
 .loginform input[type="submit"]:hover{
     background-color:#2ecc71;
@@ -79,15 +79,18 @@ h1{
 	border:2px solid #2ecc71;
 	
 }
-.modal-body form .email:focus,.modal-body form .account:focus,.modal-body form .password:focus{
-	border-color:#5DADE2;
-    width:400px;
-    transition:0.5s;
-}
+/* 註冊欄選取會有動畫 */
+/*.modal-body form .email:focus,.modal-body form .account:focus,.modal-body form .password:focus{*/
+/*	border-color:#5DADE2;*/
+/*    width:400px;*/
+/*    transition:0.5s;*/
+/*}*/
+
 .modal-body .btn:hover{
     background-color:#2ecc71;
     transition: 0.5s;
 }
+
 .form-group {
     position: relative;
 }

@@ -24,14 +24,14 @@ public class InformationController {
 		return "information";
 	}
 	
-	@PutMapping("index/information/update/{usersid}")
-	public String updateInformation(@PathVariable("usersid")Integer usersid,@RequestBody User users1) {
-		User users = userRepository.getUserById(usersid);
-		users.setUsername(users1.getUsername());
-		users.setEmail(users1.getEmail());
-		userRepository.updateUserInfo(usersid ,users.getUsername(), users.getPassword(), users.getEmail(), users.getRole().toString());
-		return "更改成功";
-	}
+//	@PutMapping("index/information/update/{usersid}")
+//	public String updateInformation(@PathVariable("usersid")Integer usersid,@RequestBody User users1) {
+//		User users = userRepository.getUserById(usersid);
+//		users.setUsername(users1.getUsername());
+//		users.setEmail(users1.getEmail());
+//		userRepository.updateUserInfo(usersid ,users.getUsername(), users.getPassword(), users.getEmail(), users.getRole().toString());
+//		return "更改成功";
+//	}
 	
 
 }
