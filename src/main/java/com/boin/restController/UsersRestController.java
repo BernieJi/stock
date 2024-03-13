@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Objects;
 
 import com.boin.common.BaseResponse;
+import com.boin.common.BaseResponseModel;
 import com.boin.entity.User;
 import com.boin.repository.UserRepository;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +23,21 @@ public class UsersRestController {
 	
 	// 查詢所有用戶資訊
 	@Operation(summary = "查詢所有用戶的資訊")
-	@GetMapping(path="/usersinfo/all",produces="application/json")
-	public List<User> getAllUsers(){
+	@GetMapping(path="/rawdata/all", produces="application/json")
+	public ResponseEntity<BaseResponseModel> getAllUsers(){
+		var res = new BaseResponseModel();
 		List<User> users = userRepository.getAllUsersInfo();
-		return users;
+		if(Objects.isNull(users)){
+			res.setFail("500","查詢使用者資料錯誤");
+			return new ResponseEntity<>(res,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		res.setSuccess(users);
+		return new ResponseEntity<>(res,HttpStatus.OK);
 		}
 	
-	// 根據usersName查詢用戶資訊
+	// 根據userName查詢用戶資訊
 	@Operation(summary = "根據userName查詢用戶資訊")
-	@GetMapping(path="/{username}",produces="application/json")
+	@GetMapping(path="/rawdata/{username}",produces="application/json")
 	public User userQueryByUserName(@PathVariable("username")String username){
 		User user = userRepository.getUserByUserName(username);
 		return user;

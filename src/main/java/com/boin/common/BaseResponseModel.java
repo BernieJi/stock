@@ -1,18 +1,19 @@
 package com.boin.common;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
-@Builder
 public class BaseResponseModel<T> {
 
-    private String code;
+    public String code;
 
-    private String message;
+    public String message;
 
-    private T data;
+    public T data;
 
     /*
      *
