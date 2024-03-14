@@ -24,4 +24,10 @@ class UserRepositoryTest {
         var res = userRepository.getUserByUserName("boin");
         System.out.println(res);
     }
+
+    @Test
+    void updateUserTest(){
+        var res = userRepository.updateUserInfo("boin","aaa@gmail.com");
+        System.out.println(res);
+    }
 }

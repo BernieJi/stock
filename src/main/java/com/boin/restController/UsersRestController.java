@@ -5,9 +5,9 @@ import java.util.Objects;
 
 import com.boin.common.BaseResponse;
 import com.boin.common.BaseResponseModel;
+import com.boin.entity.DTO.UserUpdateDTO;
 import com.boin.entity.User;
 import com.boin.repository.UserRepository;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,8 +46,8 @@ public class UsersRestController {
 	// 根據username修改用戶資料
 	@Operation(summary = "根據username修改用戶資料")
 	@PutMapping(path="/update/{username}")
-	public ResponseEntity<BaseResponse> updateUser(@PathVariable(value="usersname") String username, String email){
-		Integer update = userRepository.updateUserInfo(username, email);
+	public ResponseEntity<BaseResponse> updateUser(@PathVariable(value="username") String username, @RequestBody UserUpdateDTO updateDTO){
+		Integer update = userRepository.updateUserInfo(username, updateDTO.getEmail());
 		if(Objects.isNull(update) || update <= 0){
 			var res = BaseResponse.builder().code("500").message("更新資料錯誤").build();
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);

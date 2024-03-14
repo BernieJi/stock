@@ -46,7 +46,7 @@ public class SecurityConfig {
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 				.exceptionHandling()
-				.authenticationEntryPoint(customAuthenticationEntryPoint)
+				//.authenticationEntryPoint(customAuthenticationEntryPoint)
 				.and()
 				.logout()
 				.logoutSuccessUrl("/loginpage")

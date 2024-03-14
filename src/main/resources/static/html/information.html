@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.themeleaf.org">
     <head>
-        <title>User Information</title>
+        <title>User InformationTest</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- 導入Bootstrap -->
-        <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+		<!-- 導入Axios -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.js"></script>
+		<!-- 導入Vue -->
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 		<!-- 導入FontAwesome -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 	</head>
@@ -17,30 +17,69 @@
 			<a href="/index">按此回到首頁 <i class="fa-solid fa-house"></i></a>
 		</div>
 		
-		<div th:object="${ users}" style="position:fixed;top:50px;left:260px">
+		<div id="app" style="position:fixed;top:50px;left:260px">
 			<h1>修改個人資訊</h1>
-			<table class="pure-table pure-table-bordered">
-				<thead>
-					<tr>
-						<th>username</th>
-						<th>email</th>
-						<th>編輯</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><input type="text"></td>
-						<td><input type="text"></td>
-						<td>
-							<a type="button" th:href="@{index/information/update/{usersid}(usersid=${users.id})}">編輯使用者資訊</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-        </div>            	
+			帳號：<input type="text" :value="user.username" disabled>
+			<br />
+			<br />
+			信箱：<input type="text" v-model="user.email">
+			<br />
+			<br />
+			<button @click="update">保存編輯</button>
+			<br />
+			<br />
+        </div>
+		
+		<script type="text/javascript">
+			Vue.createApp({
+				data:function(){
+					return {
+						user:{id:'',username:'',password:'',email:'',authority:''}
+					}
+				},
+				methods :{
+					query:function(){
+						let username = sessionStorage.getItem("username");
+						var serviceURL = '/api/v1/user/rawdata/'+ username;
+						axios.get(serviceURL,{
+							headers:{
+								'Authorization' : sessionStorage.getItem("Authorization")
+							}
+						})
+							.then((response) => {
+							console.log(response);
+							this.user.id = response.data.id;
+							this.user.username = response.data.username;
+							this.user.password = response.data.password;
+							this.user.email = response.data.email;
+							}
+						)	
+					},
+
+					update:function(){
+						var serviceURL = '/api/v1/user/update/'+ this.user.username;
+						axios.put(serviceURL,
+							{email:this.user.email},
+							{
+								headers:{
+									'Authorization' : sessionStorage.getItem("Authorization")	
+								}
+							})
+						.then(function (response) {
+							console.log(response);
+						})
+						.catch(function (error) {
+							console.log(error);
+						});
+					}
+				},
+				mounted:function(){
+					// 在mounted鉤子中調用query方法
+					this.query();	
+				}
+			}).mount('#app');
+
+		</script>
      
-       	<footer style="position:fixed;bottom:0px;left:600px">
-    		<p>© Financial System 2022/06/06 0912-345-678</p>
-  		</footer> 
     </body>
 </html>

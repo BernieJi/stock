@@ -101,7 +101,7 @@ public class UserRepository {
      */
     public Integer updateUserInfo(String username, String email) {
         final String sql = """
-                UPDATE user  SET email = ? 
+                UPDATE user SET email = ? 
                 WHERE username = ?
                 """;
         try {

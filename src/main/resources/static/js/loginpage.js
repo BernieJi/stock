@@ -15,7 +15,6 @@ $(document).ready(function(){
             .then(function (response) {
                 if (response.data.code === "200") {
                     let jwt = "Bearer " + response.data.token;
-                    // console.log("jwt取出來為:" + jwt);
                     // 將jwt 儲存在localStorage
                     sessionStorage.setItem("Authorization",jwt);
                     sessionStorage.setItem("username",username);
