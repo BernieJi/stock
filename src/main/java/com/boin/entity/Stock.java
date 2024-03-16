@@ -24,24 +24,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Stock {
 
-	    public String Code;
+	    public String code;
 	 	
-	    public String Name;
+	    public String name;
 
-		public String OpeningPrice;
+		public String openingPrice;
 
-		public String ClosingPrice;
+		public String closingPrice;
 
-		public String HighestPrice;
+		public String highestPrice;
 
-		public String LowestPrice;
+		public String lowestPrice;
 
-		public String Change;
+		public String change;
 
-		public String TradeValue;
+		public String tradeValue;
 	 
-	    public String TradeVolume;
+	    public String tradeVolume;
 
-	    public String Transaction;
+	    public String transaction;
 	}
 

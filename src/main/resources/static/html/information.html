@@ -4,12 +4,16 @@
         <title>User InformationTest</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- 導入JQuery -->
+    	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<!-- 導入Axios -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.js"></script>
 		<!-- 導入Vue -->
 		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 		<!-- 導入FontAwesome -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+		<!-- 導入JavaScript 檔案 -->
+    	<script type="text/javascript" src="/js/information.js"></script>
 	</head>
 
     <body>
@@ -28,58 +32,6 @@
 			<button @click="update">保存編輯</button>
 			<br />
 			<br />
-        </div>
-		
-		<script type="text/javascript">
-			Vue.createApp({
-				data:function(){
-					return {
-						user:{id:'',username:'',password:'',email:'',authority:''}
-					}
-				},
-				methods :{
-					query:function(){
-						let username = sessionStorage.getItem("username");
-						var serviceURL = '/api/v1/user/rawdata/'+ username;
-						axios.get(serviceURL,{
-							headers:{
-								'Authorization' : sessionStorage.getItem("Authorization")
-							}
-						})
-							.then((response) => {
-							console.log(response);
-							this.user.id = response.data.id;
-							this.user.username = response.data.username;
-							this.user.password = response.data.password;
-							this.user.email = response.data.email;
-							}
-						)	
-					},
-
-					update:function(){
-						var serviceURL = '/api/v1/user/update/'+ this.user.username;
-						axios.put(serviceURL,
-							{email:this.user.email},
-							{
-								headers:{
-									'Authorization' : sessionStorage.getItem("Authorization")	
-								}
-							})
-						.then(function (response) {
-							console.log(response);
-						})
-						.catch(function (error) {
-							console.log(error);
-						});
-					}
-				},
-				mounted:function(){
-					// 在mounted鉤子中調用query方法
-					this.query();	
-				}
-			}).mount('#app');
-
-		</script>
-     
+        </div>     
     </body>
 </html>

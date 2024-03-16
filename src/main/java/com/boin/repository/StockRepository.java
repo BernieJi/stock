@@ -1,5 +1,6 @@
 package com.boin.repository;
 
+import com.boin.entity.JsonStock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -42,7 +43,7 @@ public class StockRepository {
      *  儲存台灣股票資料
      *
      */
-    public int[] batchInsertStock(List<Stock> stocks){
+    public int[] batchInsertStock(List<JsonStock> stocks){
         final String sql = """
                 INSERT INTO stock (code, name, opening_price, closing_price, highest_price, lowest_price
                                 , `change`, trade_value, trade_volume, `transaction`) 
@@ -62,17 +63,17 @@ public class StockRepository {
             return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
                 @Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException {
-                    Stock stock = stocks.get(i);
-                    ps.setString(1,stock.getCode());
-                    ps.setString(2,stock.getName());
-                    ps.setString(3,stock.getOpeningPrice());
-                    ps.setString(4,stock.getClosingPrice());
-                    ps.setString(5,stock.getHighestPrice());
-                    ps.setString(6,stock.getLowestPrice());
-                    ps.setString(7,stock.getChange());
-                    ps.setString(8,stock.getTradeValue());
-                    ps.setString(9,stock.getTradeVolume());
-                    ps.setString(10,stock.getTransaction());
+                    JsonStock jsonStock = stocks.get(i);
+                    ps.setString(1,jsonStock.getCode());
+                    ps.setString(2,jsonStock.getName());
+                    ps.setString(3,jsonStock.getOpeningPrice());
+                    ps.setString(4,jsonStock.getClosingPrice());
+                    ps.setString(5,jsonStock.getHighestPrice());
+                    ps.setString(6,jsonStock.getLowestPrice());
+                    ps.setString(7,jsonStock.getChange());
+                    ps.setString(8,jsonStock.getTradeValue());
+                    ps.setString(9,jsonStock.getTradeVolume());
+                    ps.setString(10,jsonStock.getTransaction());
                 }
 
                 @Override
@@ -80,6 +81,26 @@ public class StockRepository {
                     return stocks.size();
                 }
             });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     *
+     *  根據股票代號查詢股票資料
+     *
+     */
+    public Stock getStockByCode(String code){
+        final String sql = """
+                SELECT * FROM stock
+                WHERE code = ?
+                """;
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Stock.class),code);
+        } catch (EmptyResultDataAccessException ex){
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
         }

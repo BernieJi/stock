@@ -1,58 +1,49 @@
-//package com.boin.restController;
-//
-//import java.util.List;
-//
-//import com.boin.entity.CustomUser;
-//import com.boin.repository.UserRepository;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.web.bind.annotation.DeleteMapping;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//import com.boin.entity.Stock;
+package com.boin.restController;
+
+import java.util.List;
+
+import com.boin.common.BaseResponseModel;
+import com.boin.repository.UserRepository;
+import com.boin.service.StockService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.boin.entity.Stock;
 //import com.boin.entity.WatchList;
-//import com.boin.repository.StockRepository;
+import com.boin.repository.StockRepository;
 //import com.boin.repository.WatchListRepository;
-//
-//import io.swagger.v3.oas.annotations.Operation;
-//import io.swagger.v3.oas.annotations.tags.Tag;
-//
-//@Tag(name = "股票Api",description = "關於股票的功能")
-//@RestController
-//public class StockRestController {
-//
-//	@Autowired
-//	private StockRepository stockRepository;
-//
-//	@Autowired
-//	private UserRepository userRepository;
-//
-//	@Autowired
-//	private WatchListRepository watchListRepository;
-//
-//	// 查詢所有股票資訊
-//	@Operation(summary = "查詢所有股票資訊")
-//	@GetMapping(path="/stockinfo/rawdata/all",produces="application/json")
-//	public List<Stock> allStocks(){
-//		List<Stock> stocks = stockRepository.findAll();
-//		return stocks;
-//		}
-//
-//	// 根據stockCode查詢股票資訊
-//	@Operation(summary = "根據stockCode查詢股票資訊")
-//	@GetMapping(path="/stockinfo/rawdata/{stockcode}",produces="application/json")
-//	public Stock stockQueryByStockCode(@PathVariable("stockcode")String stockcode){
-//		Stock stock = stockRepository.getByCode(stockcode);
-//		return stock;
-//	}
-//
-//	// 將此檔股票加入追蹤清單
-//	// 個股加入追蹤清單頁面
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "股票Api",description = "關於股票的功能")
+@RestController
+@RequestMapping("/api/v1/stock")
+@RequiredArgsConstructor
+public class StockRestController {
+
+	private final StockService stockService;
+
+	private final UserRepository userRepository;
+	// private WatchListRepository watchListRepository;
+
+	// 查詢所有股票資訊
+	@Operation(summary = "查詢所有股票資訊")
+	@GetMapping(path="/rawdata",produces="application/json")
+	public ResponseEntity<BaseResponseModel> getAllStocks(){
+		return stockService.getAllStocks();
+	}
+
+	// 根據stockCode查詢股票資訊
+	@Operation(summary = "根據stockCode查詢股票資訊")
+	@GetMapping(path="/rawdata/{code}",produces="application/json")
+	public ResponseEntity<BaseResponseModel> getStockByCode(@PathVariable("code")String code){
+		return stockService.getStockByCode(code);
+	}
+
+	// 將此檔股票加入追蹤清單
+	// 個股加入追蹤清單頁面
 //	@Operation(summary = "根據stockCode與username將股票加入追蹤清單")
 //	@PostMapping("/stockinfo/rawdata/{stockcode}/{username}/addtowatchlist")
 //	public String addToWatchList(@PathVariable("stockcode") String stockcode,@PathVariable("username")String username) {
@@ -78,5 +69,5 @@
 //		stockRepository.delete(stock);
 //		return "redirect:./";
 //		}
-//}
-//
+}
+

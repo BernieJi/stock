@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("/api/v1/user")
 public class UsersRestController {
 	
 	@Autowired
