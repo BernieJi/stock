@@ -25,6 +25,10 @@ import java.util.List;
 
 		private String role;
 
+//		private Boolean locked = false;
+//
+//		private Boolean enabled = false;
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority(this.role));

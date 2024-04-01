@@ -1,7 +1,6 @@
 package com.boin;
 
 import com.boin.repository.StockRepository;
-import com.boin.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,13 @@ class StockRepositoryTest {
     private StockRepository stockRepository;
 
     @Test
+    void getAllStockCount(){
+        Integer totalCount = stockRepository.getStockTotalCount();
+        System.out.println(totalCount);
+    }
+    @Test
     void findAllStockInfoTest() {
-        var res = stockRepository.getAllStockInfo();
+        var res = stockRepository.getStockInfo(1,100);
         System.out.println(res);
         Assertions.assertNotNull(res);
     }

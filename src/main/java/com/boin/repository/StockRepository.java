@@ -21,15 +21,37 @@ public class StockRepository {
 
     /*
      *
-     *  查詢所有台灣股票資料
-     *
+     *  查詢台灣股票總數
+     *  Date   2024/4/1
+     *  Author Boin
      */
-    public List<Stock> getAllStockInfo(){
+    public Integer getStockTotalCount(){
         final String sql = """
-                SELECT * FROM stock
+                SELECT count(*) FROM stock
                 """;
         try {
-            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Stock.class));
+            return jdbcTemplate.queryForObject(sql,Integer.class);
+        } catch (EmptyResultDataAccessException ex){
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     *
+     *  查詢台灣股票資料
+     *
+     */
+    public List<Stock> getStockInfo(int currentPage , int pageSize){
+        int startIndex = (currentPage - 1) * pageSize;
+        final String sql = """
+                SELECT * FROM stock
+                LIMIT ?,?
+                """;
+        try {
+            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Stock.class), startIndex, startIndex + 100);
         } catch (EmptyResultDataAccessException ex){
             return null;
         } catch (Exception e) {

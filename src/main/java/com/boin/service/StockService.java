@@ -26,10 +26,22 @@ import com.boin.entity.Stock;
 public class StockService {
 	private final StockRepository stockRepository;
 
-	// 查詢所有stock資訊
-	public ResponseEntity<BaseResponseModel> getAllStocks(){
+	// 查詢台灣股票筆數
+	public ResponseEntity<BaseResponseModel> getAllStockCount(){
 		BaseResponseModel res = new BaseResponseModel();
-		List<Stock> stocks = stockRepository.getAllStockInfo();
+		Integer stockCount= stockRepository.getStockTotalCount();
+		if(Objects.isNull(stockCount)){
+			res.setFail("500","內部查詢出現錯誤，請聯絡管理員");
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		res.setSuccess(stockCount);
+		return new ResponseEntity<>(res,HttpStatus.OK);
+	}
+
+	// 查詢所有stock資訊
+	public ResponseEntity<BaseResponseModel> getStocksInfo(int currentPage, int pageSize){
+		BaseResponseModel res = new BaseResponseModel();
+		List<Stock> stocks = stockRepository.getStockInfo(currentPage,pageSize);
 		if(Objects.isNull(stocks)){
 			res.setFail("500","內部查詢出現錯誤，請聯絡管理員");
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);

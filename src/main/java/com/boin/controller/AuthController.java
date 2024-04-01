@@ -44,6 +44,6 @@ public class AuthController {
 			return new ResponseEntity<>(res, HttpStatus.OK);
 		}
 		BaseResponse res = new BaseResponse("500","該帳號已存在，請重新輸入！");
-		return new ResponseEntity<>(res,HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(res,HttpStatus.OK);
 	}
 }

@@ -25,7 +25,7 @@ public class UserRepository {
     */
     public List<User> getAllUsersInfo() {
         final String sql = """
-                SELECT id, username, password, email, role
+                SELECT id, username, password, email, role, locked, enabled
                 FROM user
                 """;
         try {
@@ -43,7 +43,7 @@ public class UserRepository {
      */
     public User getUserByUserName(String username) {
         final String sql = """
-                SELECT id, username, password, email, role
+                SELECT id, username, password, email, role, locked, enabled
                 FROM user
                 where username = ?
                 """;
@@ -64,7 +64,7 @@ public class UserRepository {
      */
     public User getUserById(Integer id) {
         final String sql = """
-                SELECT id, username, password, email, role
+                SELECT id, username, password, email, role, locked, enabled
                 FROM user
                 where id = ?
                 """;

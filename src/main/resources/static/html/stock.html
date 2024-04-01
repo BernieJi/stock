@@ -65,11 +65,13 @@
 						<td>{{ stock.highestPrice }}</td>
 						<td>{{ stock.lowestPrice }}</td>
 						<td>
-							<a type="button" th:href="@{/index/stock/info/{stockcode}(stockcode=${stock.Code})}">詳細資訊</a>
+							<a type="button" :href="'/html/stockInfo.html?code=' + stock.code">詳細資訊</a>
 						</td>
 						
 					</tr>	
 				</tbody>
+				<button @click="prevPage();queryAll()">上一頁</button>
+				<button @click="nextPage();queryAll()">下一頁</button>
 				
 			</table>
 
@@ -80,25 +82,53 @@
 				Vue.createApp({
 					data:function(){
 						return {
-							stockList:[
-							]
+							totalStockCount:0,
+							totalPages:0,
+							stockList:[],
+							currentPage: 1,
+        					pageSize: 100 
 						}
 					},
 					methods :{
-						queryAll:function(){					
-							let serviceURL = '/api/v1/stock/rawdata';
+						// 切換到上一頁
+						prevPage:function() {
+							if (this.currentPage > 1) {
+								this.currentPage--;
+							}
+						},
+						// 切換到下一頁
+						nextPage:function() {
+							// TODO需加判斷
+							console.log('總頁數為:' + this.totalPages);
+							this.currentPage++;
+						},
+						queryAll:function(currentPage, pageSize){					
+							let serviceURL = '/api/v1/stock/rawdata?currentPage='+ this.currentPage + '&pageSize='+ this.pageSize;
 							axios.get(serviceURL,{
 								headers:{
 									'Authorization' : sessionStorage.getItem("Authorization")
 								}
 							})
-								.then(function(response){
+								.then((response)=>{
 								// console.log(response);
 								this.stockList = response.data.data
 								}
 							)	
 						},
-						// 需要再調整
+						queryTotalCount:function(){
+							let serviceURL = '/api/v1/stock/rawdata/count';
+							axios.get(serviceURL,{
+								headers:{
+									'Authorization' : sessionStorage.getItem("Authorization")
+								}
+							})
+								.then((response)=>{
+								// console.log('股票總數為:' + response);
+								this.totalStockCount = response.data.data
+								}
+							)		
+						},
+						// TODO需要再調整
 						query:function(){
 							let code = $("#myInput").val();
 							var serviceURL = '/api/v1/stock/rawdata/'+ code;
@@ -122,8 +152,16 @@
 							});
 						}
 					},
+					computed:{
+						totalStockPages:{
+							get(){
+								return Math.ceil(this.totalStockCount / this.pageSize);	
+							}	
+						}	
+					},
 					mounted:function(){
-						this.queryAll();	
+						this.queryAll(1, 100);	
+						this.queryTotalCount();
 					}
 				}).mount('#app');
 		

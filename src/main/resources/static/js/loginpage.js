@@ -71,7 +71,7 @@ $(document).ready(function(){
     let input = document.getElementById("register_name");
     input.addEventListener('blur',function(){
         let username = input.value;
-        axios.get('/check?username=' + username)
+        axios.get('/api/v1/auth/check?username=' + username)
             .then(function (response) {
                 let show = document.getElementById("check_name");
                 if (response.data.code === "200") {
@@ -79,7 +79,9 @@ $(document).ready(function(){
                     show.textContent = "帳號可建立";
                 } else {
                     show.style.display = "inline";
+                    show.style.color = 'red';
                     show.textContent = "帳號已存在，請嘗試其他帳號";
+
                 }
             })
             .catch(function (error) {
