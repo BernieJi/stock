@@ -57,9 +57,9 @@ public class SpringProjectApplication {
 				stocks = gson.fromJson(reader, listType);
 				int[] res = stockService.saveAllStock(stocks);
 				// System.out.println("download Taiwanese stock data success!");
-				} catch (IOException e) {
-					// System.out.println("Unable to save stocks:" + e.getMessage());
-				}
+			} catch (IOException e) {
+				// System.out.println("Unable to save stocks:" + e.getMessage());
+			}
 		};
 	}
 }

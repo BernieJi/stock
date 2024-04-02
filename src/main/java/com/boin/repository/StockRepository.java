@@ -67,10 +67,11 @@ public class StockRepository {
      */
     public int[] batchInsertStock(List<JsonStock> stocks){
         final String sql = """
-                INSERT INTO stock (code, name, opening_price, closing_price, highest_price, lowest_price
+                INSERT INTO stock (date, code, name, opening_price, closing_price, highest_price, lowest_price
                                 , `change`, trade_value, trade_volume, `transaction`) 
-                        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        VALUES(DATE(NOW()), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         ON DUPLICATE KEY UPDATE
+                        date = VALUES(date),
                         name = VALUES(name),
                         opening_price = VALUES(opening_price),
                         closing_price = VALUES(closing_price),
