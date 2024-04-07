@@ -36,9 +36,6 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
     implementation 'io.jsonwebtoken:jjwt-gson:0.12.5'
 
-    //project lib dependencies
-    implementation 'com.yahoofinance-api:YahooFinanceAPI:3.17.0'
-
     implementation 'com.github.javafaker:javafaker:1.0.2'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.amazonaws:aws-java-sdk:1.12.647'

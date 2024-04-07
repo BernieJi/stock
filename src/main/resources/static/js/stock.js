@@ -3,6 +3,7 @@ $(document).ready(function(){
 	Vue.createApp({
 		data:function(){
 			return {
+				lastStockDate:'',
 				totalStockCount:0,
 				totalPages:0,
 				stockList:[],
@@ -21,6 +22,18 @@ $(document).ready(function(){
 			nextPage:function() {
 				if(this.currentPage < this.totalStockPages)
 				this.currentPage++;
+			},
+			queryLastDate:function(){					
+				let serviceURL = '/api/v1/stock/rawdata/date';
+				axios.get(serviceURL,{
+					headers:{
+						'Authorization' : sessionStorage.getItem("Authorization")
+					}
+				})
+					.then((response)=>{
+						this.lastStockDate = response.data.data
+					}
+				)	
 			},
 			queryAll:function(currentPage, pageSize){					
 				let serviceURL = '/api/v1/stock/rawdata?currentPage='+ this.currentPage + '&pageSize='+ this.pageSize;
@@ -84,6 +97,7 @@ $(document).ready(function(){
 			}	
 		},
 		mounted:function(){
+			this.queryLastDate();
 			this.queryAll(1, 100);	
 			this.queryTotalCount();
 		}

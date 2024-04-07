@@ -16,7 +16,6 @@ import com.boin.repository.StockRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import yahoofinance.YahooFinance;
 
 @Tag(name = "股票Api",description = "關於股票的功能")
 @RestController
@@ -30,13 +29,19 @@ public class StockRestController {
 
 	// private WatchListRepository watchListRepository;
 
-	// 查詢股票筆數
+	// 查詢最近一個股票營業日
+	@GetMapping(path="/rawdata/date",produces="application/json")
+	public ResponseEntity<BaseResponseModel> getLastStockDate(){
+		return stockService.getLastStockDate();
+	}
+
+	// 查詢股票總筆數
 	@GetMapping(path="/rawdata/count",produces="application/json")
 	public ResponseEntity<BaseResponseModel> getAllStockCount(){
 		return stockService.getAllStockCount();
 	}
 
-	// 查詢股票資訊
+	// 查詢最近一個營業日股票資訊
 	@Operation(summary = "查詢股票資訊")
 	@GetMapping(path="/rawdata",produces="application/json")
 	public ResponseEntity<BaseResponseModel> getAllStocks(@RequestParam(value = "currentPage") int currentPage,@RequestParam(value = "pageSize") int pageSize){
@@ -49,9 +54,6 @@ public class StockRestController {
 	public ResponseEntity<BaseResponseModel> getStockByCode(@PathVariable("code")String code){
 		return stockService.getStockByCode(code);
 	}
-
-	YahooFinance y = new YahooFinance();
-
 
 	// 將此檔股票加入追蹤清單
 	// 個股加入追蹤清單頁面

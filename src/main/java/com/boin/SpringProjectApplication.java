@@ -55,7 +55,6 @@ public class SpringProjectApplication {
 				Gson gson = new Gson();
 				Type listType = new TypeToken<List<JsonStock>>(){}.getType();
 				stocks = gson.fromJson(reader, listType);
-				int[] res = stockService.saveAllStock(stocks);
 				// System.out.println("download Taiwanese stock data success!");
 			} catch (IOException e) {
 				// System.out.println("Unable to save stocks:" + e.getMessage());

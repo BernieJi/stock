@@ -24,9 +24,30 @@ import com.boin.entity.Stock;
 @Service
 @RequiredArgsConstructor
 public class StockService {
+
 	private final StockRepository stockRepository;
 
-	// 查詢台灣股票筆數
+	/* 查詢台灣最近的一個股票營業日
+	 *	author Boin
+	 *	Date   2024/4/7
+	 */
+	public ResponseEntity<BaseResponseModel> getLastStockDate(){
+		BaseResponseModel res = new BaseResponseModel();
+		String lastDate = stockRepository.getLastStockDate();
+		if(Objects.isNull(lastDate)){
+			res.setFail("500","內部查詢出現錯誤，請聯絡管理員");
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		// 將日期轉換為需要的格式
+		String parsedDate = lastDate.substring(0,11);
+		res.setSuccess(parsedDate);
+		return new ResponseEntity<>(res,HttpStatus.OK);
+	}
+
+	/* 查詢台灣股票總筆數
+	 *	author Boin
+	 *	Date   2024/4/7
+	 */
 	public ResponseEntity<BaseResponseModel> getAllStockCount(){
 		BaseResponseModel res = new BaseResponseModel();
 		Integer stockCount= stockRepository.getStockTotalCount();
@@ -38,7 +59,7 @@ public class StockService {
 		return new ResponseEntity<>(res,HttpStatus.OK);
 	}
 
-	// 查詢所有stock資訊
+	// 查詢最近一個營業日的stock資訊
 	public ResponseEntity<BaseResponseModel> getStocksInfo(int currentPage, int pageSize){
 		BaseResponseModel res = new BaseResponseModel();
 		List<Stock> stocks = stockRepository.getStockInfo(currentPage,pageSize);
@@ -66,14 +87,6 @@ public class StockService {
 	public int[] saveAllStock(List<JsonStock> stocks){
 		return stockRepository.batchInsertStock(stocks);
 	}
-
-	// 根據Code查詢單檔股票
-//	public Stock getByCode(String code) {
-//		Optional<Stock> optStock = stockRepository.findAll().stream()
-//				.filter(s->s.Code.equals(code))
-//				.findFirst();
-//		return optStock.isPresent()?optStock.get():null;
-//	}
 
 
 }

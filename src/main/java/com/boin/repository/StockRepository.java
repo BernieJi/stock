@@ -2,6 +2,8 @@ package com.boin.repository;
 
 import com.boin.entity.JsonStock;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -9,7 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.boin.entity.Stock;
 
-import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
@@ -17,37 +18,58 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class StockRepository {
+
     private final JdbcTemplate jdbcTemplate;
 
+    private final Logger logger = (Logger) LogManager.getLogger();
+
     /*
-     *
+     *  查詢前一個股票營業日
+     *  Date   2024/4/7
+     *  Author Boin
+     */
+    public String getLastStockDate(){
+        final String sql = """
+                SELECT DISTINCT(date) 
+                FROM stock 
+                ORDER BY date DESC 
+                LIMIT 1;
+                """;
+        try {
+            return jdbcTemplate.queryForObject(sql,String.class);
+        } catch (Exception e) {
+            logger.error(e.toString());
+        }
+        return null;
+    }
+
+    /*
      *  查詢台灣股票總數
      *  Date   2024/4/1
      *  Author Boin
      */
     public Integer getStockTotalCount(){
         final String sql = """
-                SELECT count(*) FROM stock
+                SELECT count(DISTINCT(code)) FROM stock;
                 """;
         try {
             return jdbcTemplate.queryForObject(sql,Integer.class);
-        } catch (EmptyResultDataAccessException ex){
-            return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
         return null;
     }
 
     /*
-     *
-     *  查詢台灣股票資料
-     *
+     *  查詢台灣最近的一個營業日股票資料
+     *  Author Boin
+     *  Date   2024/4/7
      */
     public List<Stock> getStockInfo(int currentPage , int pageSize){
         int startIndex = (currentPage - 1) * pageSize;
         final String sql = """
-                SELECT * FROM stock
+                SELECT * FROM stock 
+                ORDER BY date DESC, code asc
                 LIMIT ?,?
                 """;
         try {
@@ -55,7 +77,7 @@ public class StockRepository {
         } catch (EmptyResultDataAccessException ex){
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.error(e.toString());
         }
         return null;
     }
@@ -111,21 +133,23 @@ public class StockRepository {
     }
 
     /*
-     *
      *  根據股票代號查詢股票資料
-     *
+     *  Author Boin
+     *  Date 2024/4/7
      */
     public Stock getStockByCode(String code){
         final String sql = """
-                SELECT * FROM stock
-                WHERE code = ?
+                SELECT * FROM stock 
+                WHERE code = ? 
+                ORDER BY date DESC 
+                LIMIT 1;
                 """;
         try {
             return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Stock.class),code);
         } catch (EmptyResultDataAccessException ex){
-            return null;
+            return new Stock();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
         return null;
     }

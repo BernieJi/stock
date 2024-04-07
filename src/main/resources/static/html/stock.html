@@ -40,6 +40,11 @@
 			<br/>
 			<br/>
 
+			<h6>資料最後更新日期:{{ lastStockDate }}</h6>
+
+			<button @click="prevPage();queryAll()" :disabled="currentPage === 1">上一頁</button>
+			<button @click="nextPage();queryAll()" :disabled="currentPage === totalStockPages">下一頁</button>
+
 			<table id="myTable" class="pure-table pure-table-bordered" v-for="stock in stockList">
 				<thead>
 					<tr>
@@ -69,8 +74,6 @@
 						
 					</tr>	
 				</tbody>
-				<button @click="prevPage();queryAll()" :disabled="currentPage === 1">上一頁</button>
-				<button @click="nextPage();queryAll()" :disabled="currentPage === totalStockPages">下一頁</button>
 				
 			</table>
 
