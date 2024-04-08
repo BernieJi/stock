@@ -12,6 +12,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,6 +27,8 @@ import com.boin.entity.Stock;
 @SpringBootApplication
 @RestController
 public class SpringProjectApplication {
+	@Autowired
+	private StockService stockService;
 	
 	@GetMapping("/message")
 	public String message() {
@@ -55,6 +58,7 @@ public class SpringProjectApplication {
 				Gson gson = new Gson();
 				Type listType = new TypeToken<List<JsonStock>>(){}.getType();
 				stocks = gson.fromJson(reader, listType);
+				stockService.saveAllStock(stocks);
 				// System.out.println("download Taiwanese stock data success!");
 			} catch (IOException e) {
 				// System.out.println("Unable to save stocks:" + e.getMessage());

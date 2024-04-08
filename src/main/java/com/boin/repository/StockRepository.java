@@ -1,6 +1,7 @@
 package com.boin.repository;
 
 import com.boin.entity.JsonStock;
+import com.boin.entity.StockChartData;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
@@ -13,6 +14,7 @@ import com.boin.entity.Stock;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -133,7 +135,7 @@ public class StockRepository {
     }
 
     /*
-     *  根據股票代號查詢股票資料
+     *  根據股票代號查詢最近一個營業日資料
      *  Author Boin
      *  Date 2024/4/7
      */
@@ -148,6 +150,27 @@ public class StockRepository {
             return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Stock.class),code);
         } catch (EmptyResultDataAccessException ex){
             return new Stock();
+        } catch (Exception e) {
+            logger.error(e.toString());
+        }
+        return null;
+    }
+
+    /*
+     *  根據股票代號查詢歷史資料
+     *  Author Boin
+     *  Date 2024/4/8
+     */
+    public List<StockChartData> getStockHistoryInfoByCode(String code){
+        final String sql = """
+                SELECT date, lowest_price, opening_price, closing_price, highest_price FROM stock 
+                WHERE code = ? 
+                ORDER BY date DESC;
+                """;
+        try {
+            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(StockChartData.class),code);
+        } catch (EmptyResultDataAccessException ex){
+            return new ArrayList<>();
         } catch (Exception e) {
             logger.error(e.toString());
         }

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.boin.common.BaseResponseModel;
 import com.boin.entity.JsonStock;
+import com.boin.entity.StockChartData;
 import com.boin.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -80,6 +81,18 @@ public class StockService {
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		res.setSuccess(stock);
+		return new ResponseEntity<>(res,HttpStatus.OK);
+	}
+
+	// 根據股票代號查詢stock歷史資訊
+	public ResponseEntity<BaseResponseModel> getStockHistoryInfoByCode(String code){
+		BaseResponseModel res = new BaseResponseModel();
+		List<StockChartData> stockHistoryInfo = stockRepository.getStockHistoryInfoByCode(code);
+		if(Objects.isNull(stockHistoryInfo)){
+			res.setFail("500","內部查詢出現錯誤，請聯絡管理員");
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		res.setSuccess(stockHistoryInfo);
 		return new ResponseEntity<>(res,HttpStatus.OK);
 	}
 

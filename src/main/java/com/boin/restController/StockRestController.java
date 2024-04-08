@@ -55,6 +55,13 @@ public class StockRestController {
 		return stockService.getStockByCode(code);
 	}
 
+	// 根據stockCode查詢股票歷史資訊
+	@Operation(summary = "根據stockCode查詢股票資訊")
+	@GetMapping(path="/rawdata/history/{code}",produces="application/json")
+	public ResponseEntity<BaseResponseModel> getStockHistoryInfoByCode(@PathVariable("code")String code){
+		return stockService.getStockHistoryInfoByCode(code);
+	}
+
 	// 將此檔股票加入追蹤清單
 	// 個股加入追蹤清單頁面
 //	@Operation(summary = "根據stockCode與username將股票加入追蹤清單")

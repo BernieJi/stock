@@ -25,8 +25,8 @@ class StockRepositoryTest {
     }
 
     @Test
-    void findStockByCode(){
-        var res = stockRepository.getStockByCode("00878");
+    void findStockHistoryDataByCode(){
+        var res = stockRepository.getStockHistoryInfoByCode("00878");
         System.out.println(res);
     }
 
