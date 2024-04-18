@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 /*
 *
-* 	用來儲存證券交易公開api的股票資料
+* 用來儲存證券交易公開api的股票資料
 */
 @Data
 @NoArgsConstructor

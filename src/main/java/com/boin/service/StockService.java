@@ -2,24 +2,17 @@ package com.boin.service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import com.boin.common.BaseResponseModel;
 import com.boin.entity.JsonStock;
 import com.boin.entity.StockChartData;
 import com.boin.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.boin.entity.Stock;
 
 @Service

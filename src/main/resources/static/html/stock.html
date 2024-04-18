@@ -5,7 +5,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- 導入JQuery -->
-    	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script> -->
         <!-- 導入Table CSS -->
         <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
 		<!-- 導入Bootstrap -->
@@ -16,7 +17,7 @@
 		<!-- 導入Axios -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.js"></script>
 		<!-- 導入Vue -->
-		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue@3.1.1/dist/vue.global.min.js"></script>
 		<!-- 導入JavaScript 檔案 -->
     	<script type="text/javascript" src="/js/stock.js"></script>
 		<style>
@@ -45,7 +46,7 @@
 			<button @click="prevPage();queryAll()" :disabled="currentPage === 1">上一頁</button>
 			<button @click="nextPage();queryAll()" :disabled="currentPage === totalStockPages">下一頁</button>
 
-			<table id="myTable" class="pure-table pure-table-bordered" v-for="stock in stockList">
+			<table id="myTable" class="pure-table pure-table-bordered" v-for="(stock,index) in stockList" :key="index">
 				<thead>
 					<tr>
 						<th>股票代號</th>
