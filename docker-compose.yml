@@ -1,0 +1,34 @@
+services:
+  db:
+    image: mysql:8.0.29-oracle
+    container_name: stock-db
+    restart: always
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: stock_system
+    command: --default-authentication-plugin=mysql_native_password
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - "3309:3306"
+  frontstage:
+    image: stock:latest
+    container_name: stock
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        VERSION: 1.0.0
+    ports:
+      - "7878:7878"
+    environment:
+      SERVER_PORT: 7878
+      SPRING_DATASOURCE_URL: jdbc:mysql://stock-db:3306/stock_system
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 12345678
+    command: ["java", "-jar", "app.war"]
+
+volumes:
+  mysql-data:

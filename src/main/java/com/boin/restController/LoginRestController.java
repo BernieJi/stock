@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @RestController
 public class LoginRestController {
@@ -36,8 +37,9 @@ public class LoginRestController {
 			user.setPassword(encodedPassword);
 			// 一般註冊會員authority設定為user
 			user.setRole(Role.USER.getString());
+			String userId = UUID.randomUUID().toString();
 			// 數據庫新增資料
-			userRepository.addUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getRole().toString());
+			userRepository.addUser(new User());
 			Message msg = new Message();
 			msg.setCode(200);
 			msg.setMsg(String.format("此帳號:%s已成功註冊 請按上一頁登入帳號",user.getUsername()));

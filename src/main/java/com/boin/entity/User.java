@@ -15,7 +15,7 @@ import java.util.List;
 	@AllArgsConstructor
 	public class User implements UserDetails {
 
-		private Integer id;
+		private String id;
 
 		private String username;
 
@@ -25,9 +25,17 @@ import java.util.List;
 
 		private String role;
 
-//		private Boolean locked = false;
-//
-//		private Boolean enabled = false;
+		private Boolean locked = false;
+
+		private Boolean enabled = false;
+
+	public User(String id, String username, String password, String email, String role) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.role = role;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -49,7 +57,7 @@ import java.util.List;
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return !locked;
 	}
 
 	@Override
@@ -59,7 +67,7 @@ import java.util.List;
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return enabled;
 	}
 }
 

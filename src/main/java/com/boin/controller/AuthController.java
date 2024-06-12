@@ -46,4 +46,9 @@ public class AuthController {
 		BaseResponse res = new BaseResponse("500","該帳號已存在，請重新輸入！");
 		return new ResponseEntity<>(res,HttpStatus.OK);
 	}
+
+	@GetMapping(path = "/confirm")
+	public String confirm(@RequestParam("token") String token) {
+		return authenticationService.confirmToken(token);
+	}
 }

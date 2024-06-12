@@ -10,7 +10,7 @@ $(document).ready(function(){
 	let jwt = sessionStorage.getItem("Authorization");
 	let username = sessionStorage.getItem("username")
 
-	axios.get('http://localhost:8081/api/v1/user/rawdata/' + username,{
+	axios.get('/api/v1/user/rawdata/' + username,{
 		headers:{
 			'Authorization' : jwt
 		}

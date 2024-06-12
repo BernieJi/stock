@@ -24,15 +24,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 @SpringBootApplication
-@RestController
 public class SpringProjectApplication {
 	@Autowired
 	private StockService stockService;
-	
-	@GetMapping("/message")
-	public String message() {
-		return "Hello";
-	}
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SpringProjectApplication.class, args);
@@ -58,7 +52,7 @@ public class SpringProjectApplication {
 				Type listType = new TypeToken<List<JsonStock>>(){}.getType();
 				stocks = gson.fromJson(reader, listType);
 				stockService.saveAllStock(stocks);
-				// System.out.println("download Taiwanese stock data success!");
+				// System.out.println("daily runtime: download Taiwanese stock data success!");
 			} catch (IOException e) {
 				// System.out.println("Unable to save stocks:" + e.getMessage());
 			}

@@ -6,6 +6,7 @@ import com.boin.common.BaseResponseModel;
 import com.boin.repository.UserRepository;
 import com.boin.service.StockService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/v1/stock")
 @RequiredArgsConstructor
 public class StockRestController {
-
 	private final StockService stockService;
 
 	private final UserRepository userRepository;

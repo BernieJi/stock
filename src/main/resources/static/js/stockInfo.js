@@ -33,7 +33,7 @@ $(document).ready(function(){
 					}
 				})
 					.then((response)=>{
-					console.log(response);
+					// console.log(response);
 					this.historyDataList = response.data.data
 					this.drawChart();
 					}

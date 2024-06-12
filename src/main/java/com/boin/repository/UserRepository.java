@@ -1,14 +1,12 @@
 package com.boin.repository;
 
 import com.boin.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class UserRepository {
@@ -81,13 +79,13 @@ public class UserRepository {
      *  新增會員資料
      *
      */
-    public Integer addUser(String username, String password, String email, String role) {
+    public Integer addUser(User user) {
         final String sql = """
-                INSERT into user (username, password, email, role) 
-                VALUES (?, ?, ?, ?) 
+                INSERT into user (id, username, password, email, role) 
+                VALUES (?, ?, ?, ?, ?) 
                 """;
         try {
-            return jdbcTemplate.update(sql, username, password, email, role);
+            return jdbcTemplate.update(sql, user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getRole());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -106,6 +104,26 @@ public class UserRepository {
                 """;
         try {
             return jdbcTemplate.update(sql, email, username);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     *
+     *  開通會員
+     *  @author Boin
+     *  @Date   2024/06/12
+     *
+     */
+    public Integer enableUser(String userId) {
+        final String sql = """
+                UPDATE user SET enabled = 1 
+                WHERE id = ?
+                """;
+        try {
+            return jdbcTemplate.update(sql, userId);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package com.boin.repository;
 
 import com.boin.entity.JsonStock;
 import com.boin.entity.StockChartData;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
@@ -91,8 +92,8 @@ public class StockRepository {
      */
     public int[] batchInsertStock(List<JsonStock> stocks){
         final String sql = """
-                INSERT INTO stock (date, code, name, opening_price, closing_price, highest_price, lowest_price
-                                , `change`, trade_value, trade_volume, `transaction`) 
+                INSERT INTO stock (date, code, name, opening_price, closing_price, highest_price, lowest_price,
+                        `change`, trade_value, trade_volume, `transaction`) 
                         VALUES(DATE(NOW()), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         ON DUPLICATE KEY UPDATE
                         date = VALUES(date),
@@ -165,7 +166,8 @@ public class StockRepository {
         final String sql = """
                 SELECT date, lowest_price, opening_price, closing_price, highest_price FROM stock 
                 WHERE code = ? 
-                ORDER BY date DESC;
+                ORDER BY date DESC
+                LIMIT 10;
                 """;
         try {
             return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(StockChartData.class),code);
