@@ -58,7 +58,6 @@ dependencies {
     implementation 'org.json:json:20231013'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE'
     implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
-    implementation 'javax.mail:javax.mail-api:1.6.2'
 
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0-M1'
     compileOnly 'org.projectlombok:lombok'
