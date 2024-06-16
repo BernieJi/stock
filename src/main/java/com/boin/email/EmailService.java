@@ -28,8 +28,7 @@ public class EmailService implements EmailSender{
                     new MimeMessageHelper(mimeMessage, "utf-8");
             helper.setText(email, true);
             helper.setTo(to);
-            helper.setSubject("Confirm your email");
-            helper.setFrom("hello@boin.com");
+            helper.setSubject("Confirm email");
             javaMailSender.send(mimeMessage);
         } catch (Exception e) {
             LOGGER.error("failed to send email", e);

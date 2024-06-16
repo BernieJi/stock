@@ -20,13 +20,13 @@ $(document).ready(function(){
                     sessionStorage.setItem("username",username);
                     alert("登入成功，將為您導入首頁！")
                     window.location.href = "/index";
-                } else {
-                    alert("登入失敗，請重新輸入帳密！")
-                    window.location.href = "/loginpage";
                 }
             })
             .catch(function (error) {
-                // console.log("發生錯誤！" + JSON.stringify(error));
+                // console.log(error);
+                alert("登入失敗，請重新輸入帳密！")
+                window.location.href = "/loginpage";
+        
             });
 
     });
@@ -49,7 +49,7 @@ $(document).ready(function(){
         })
             .then(function (response) {
                 if (response.data.code === "200") {
-                    alert("註冊成功，請輸入帳號密碼登入！")
+                    alert("註冊成功，請去信箱收驗證信！")
                     let jwt = "Bearer " + response.data.token;
                     // 將jwt 儲存
                     sessionStorage.setItem("Authorization",jwt);
@@ -62,6 +62,8 @@ $(document).ready(function(){
                 }
             })
             .catch(function (error) {
+                alert("註冊失敗，請重新註冊！")
+                window.location.href = "/loginpage";
                 // console.log("發生錯誤！！" + JSON.stringify(error));
             });
 
