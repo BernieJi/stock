@@ -43,6 +43,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-config:6.0.0'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
     implementation 'io.jsonwebtoken:jjwt-gson:0.12.5'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
 
     implementation 'com.github.javafaker:javafaker:1.0.2'
     implementation 'com.google.code.gson:gson:2.10.1'
@@ -58,6 +59,7 @@ dependencies {
     implementation 'org.json:json:20231013'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE'
     implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+    implementation 'com.yahoofinance-api:YahooFinanceAPI:3.17.0'
 
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0-M1'
     compileOnly 'org.projectlombok:lombok'

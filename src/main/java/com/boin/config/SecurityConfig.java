@@ -30,7 +30,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		// White Lists
-		String[] permitted = {"/api/v1/auth/**","/loginpage","/fail","/index","/html/**","/css/**","/js/**","/images/**"};
+		String[] permitted = {"/**","/api/v1/auth/**","/loginpage","/fail","/index","/html/**","/css/**","/js/**","/images/**"};
 		http
 				.csrf()
 				.disable()
