@@ -34,9 +34,7 @@ public class StockService {
 			res.setFail("500","內部查詢出現錯誤，請聯絡管理員");
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		// 將日期轉換為需要的格式
-		String parsedDate = lastDate.substring(0,11);
-		res.setSuccess(parsedDate);
+		res.setSuccess(lastDate);
 		return new ResponseEntity<>(res,HttpStatus.OK);
 	}
 

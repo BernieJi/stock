@@ -30,12 +30,14 @@ public class StockRestController {
 	// private WatchListRepository watchListRepository;
 
 	// 查詢最近一個股票營業日
+	@Operation(summary = "查詢最近一個股票營業日")
 	@GetMapping(path="/rawdata/date",produces="application/json")
 	public ResponseEntity<BaseResponseModel> getLastStockDate(){
 		return stockService.getLastStockDate();
 	}
 
 	// 查詢股票總筆數
+	@Operation(summary = "查詢股票總筆數")
 	@GetMapping(path="/rawdata/count",produces="application/json")
 	public ResponseEntity<BaseResponseModel> getAllStockCount(){
 		return stockService.getAllStockCount();

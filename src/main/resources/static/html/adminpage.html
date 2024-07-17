@@ -9,10 +9,12 @@
     	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<!-- 導入FontAwesome -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+		<!-- 導入JavaScript 檔案 -->
+    	<script type="text/javascript" src="/js/adminpage.js"></script>
     </head>
 
     <body> 	
-    	<div style="position:relative;top:50px;left:260px">
+    	<div id="app" style="position:relative;top:50px;left:260px">
 			<a href="../index">上一頁回首頁 <i class="fa-solid fa-house-chimney"></i></a>
 			<h1>管理員頁面</h1>
 			<table class="pure-table pure-table-bordered">
@@ -27,14 +29,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="users,stat :${ usersz}">
+					<tr>
 						<td th:text="${users.id}"></td>
 						<td th:text="${users.username}">帳戶名稱</td>
 						<td th:text="${users.email}">Email</td>
 						<td th:text="${users.authority}">權限</td>
 						<td><a type="button" th:href="@{/index/adminpage/admin/{usersid}(usersid=${users.id})}" style="text-decoration:none; border:2px,solid,black">給予admin權限</a></td>
 						<td><a type="button" th:href="@{/index/adminpage/delete(id=${users.id})}" style="text-decoration:none; border:2px,solid,black">刪除用戶</a></td>
-						
 					</tr>
 				</tbody>
 			</table>  

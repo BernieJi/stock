@@ -4,11 +4,8 @@ import java.util.List;
 
 import com.boin.entity.User;
 import com.boin.repository.UserRepository;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,16 +13,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "管理員Api",description = "關於管理員的功能")
 @RestController
+@RequestMapping("/api/v1/admin")
+@RequiredArgsConstructor
 public class AdminRestController {
-	private UserRepository userRepository;
 
-	public AdminRestController(UserRepository userRepository){
-		this.userRepository = userRepository;
-	}
+	private final UserRepository userRepository;
 	
 	// 列出所有用戶資訊
-	@Operation(summary = "列出所有Users資訊")
-	@GetMapping("/admininfo/rawdata/all")
+	@Operation(summary = "列出所有User資訊")
+	@GetMapping("/user/rawdata/all")
 	public List<User> allUsers(){
 		List<User> usersz = userRepository.getAllUsersInfo();
 		return usersz;
