@@ -1,6 +1,8 @@
 package com.boin.repository;
 
 import com.boin.entity.User;
+import com.boin.log.SlackService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,12 +11,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class UserRepository {
-    private JdbcTemplate jdbcTemplate;
 
-    public UserRepository(JdbcTemplate jdbcTemplate){
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    private final JdbcTemplate jdbcTemplate;
+    private final SlackService slackService;
 
     /*
     *
@@ -29,7 +30,7 @@ public class UserRepository {
         try {
             return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
         } catch (Exception e) {
-            e.printStackTrace();
+            slackService.sendMessage(String.format("%s error happens: %s", getClass().getName(), e.toString()));
         }
         return null;
     }
@@ -50,7 +51,7 @@ public class UserRepository {
         } catch (EmptyResultDataAccessException ex){
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            slackService.sendMessage(String.format("%s error happens: %s", getClass().getName(), e.toString()));
         }
         return null;
     }
@@ -94,7 +95,25 @@ public class UserRepository {
 
     /*
      *
-     *  修改會員資料
+     *  修改會員的權限
+     *
+     */
+    public Integer updateUserAuthority(String username, String role) {
+        final String sql = """
+                UPDATE user SET role = ? 
+                WHERE username = ?
+                """;
+        try {
+            return jdbcTemplate.update(sql, role, username);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     *
+     *  修改會員的信箱資料
      *
      */
     public Integer updateUserInfo(String username, String email) {
@@ -135,13 +154,13 @@ public class UserRepository {
      *  刪除會員資料
      *
      */
-    public Integer deleteUserById(Integer id) {
+    public Integer deleteUserByName(String username) {
         final String sql = """
                 DELETE FROM user
-                where id = ?
+                where username = ?
                 """;
         try {
-            return jdbcTemplate.update(sql, id);
+            return jdbcTemplate.update(sql, username);
         } catch (Exception e) {
             e.printStackTrace();
         }

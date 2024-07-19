@@ -22,7 +22,7 @@ class UserRepositoryTest {
     @Test
     void findByUsernameTest(){
         var res = userRepository.getUserByUserName("boin");
-        System.out.println(res);
+        Assertions.assertNotNull(res);
     }
 
     @Test

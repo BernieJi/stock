@@ -1,6 +1,7 @@
 package com.boin.schedule;
 
 import com.boin.entity.JsonStock;
+import com.boin.log.SlackService;
 import com.boin.repository.StockRepository;
 import com.boin.service.StockService;
 import com.google.gson.Gson;
@@ -26,6 +27,8 @@ public class ScheduledTasks {
 
     @Autowired
     private StockService stockService;
+    @Autowired
+    private SlackService slackService;
 
     /*
     *
@@ -34,7 +37,7 @@ public class ScheduledTasks {
     *   @Date   2024/07/17
     *
     */
-    @Scheduled(cron = "0 2 14 * * ?")
+    @Scheduled(cron = "0 0 14 * * ?")
     public void getDailyStockData(){
 
         CloseableHttpClient client = HttpClients.createDefault();
@@ -54,9 +57,9 @@ public class ScheduledTasks {
             Type listType = new TypeToken<List<JsonStock>>(){}.getType();
             stocks = gson.fromJson(reader, listType);
             stockService.saveAllStock(stocks);
-            System.out.println("Scheduled Daily Runtime >>>> Download Taiwanese Stock Data Success!--------");
-        } catch (IOException e) {
-             System.out.println("Scheduled Daily Runtime >>>> Unable to save stocks:" + e.getMessage());
+            slackService.sendScheduledMessage("Scheduled Daily Runtime >>>> Download Taiwanese Stock Data Success!--------");
+        } catch (Exception e) {
+            slackService.sendScheduledMessage("Scheduled Daily Runtime >>>> Download Taiwanese Stock Data Fail!---" + e.getMessage());
         }
     }
 }

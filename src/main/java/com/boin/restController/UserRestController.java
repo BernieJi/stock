@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
 @Tag(name = "會員api", description = "會員操作api")
 @RestController
 @RequestMapping("/api/v1/user")
-public class UsersRestController {
+public class UserRestController {
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -60,11 +60,11 @@ public class UsersRestController {
 	}
 	
 	// 刪除用戶
-	@Operation(summary = "刪除使用者")
-	@DeleteMapping("/usersinfo/rawdata/{usersid}/delete")
-	public String delete(@PathVariable(value="usersid") Integer id){
-		userRepository.deleteUserById(id);
-		return "redirect:./";
-		}
+//	@Operation(summary = "刪除使用者")
+//	@DeleteMapping("/usersinfo/rawdata/{usersid}/delete")
+//	public String delete(@PathVariable(value="usersid") Integer id){
+//		userRepository.deleteUserById(id);
+//		return "redirect:./";
+//		}
 }
 
