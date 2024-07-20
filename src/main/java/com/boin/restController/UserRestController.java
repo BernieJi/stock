@@ -8,7 +8,9 @@ import com.boin.common.BaseResponseModel;
 import com.boin.entity.DTO.UserUpdateDTO;
 import com.boin.entity.User;
 import com.boin.repository.UserRepository;
+import com.boin.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,53 +20,38 @@ import io.swagger.v3.oas.annotations.Operation;
 @Tag(name = "會員api", description = "會員操作api")
 @RestController
 @RequestMapping("/api/v1/user")
+@RequiredArgsConstructor
 public class UserRestController {
-	
-	@Autowired
-	private UserRepository userRepository;
+
+	private UserService userService;
 	
 	// 查詢所有用戶資訊
 	@Operation(summary = "查詢所有用戶的資訊")
 	@GetMapping(path="/rawdata/all", produces="application/json")
 	public ResponseEntity<BaseResponseModel> getAllUsers(){
-		var res = new BaseResponseModel();
-		List<User> users = userRepository.getAllUsersInfo();
-		if(Objects.isNull(users)){
-			res.setFail("500","查詢使用者資料錯誤");
-			return new ResponseEntity<>(res,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		res.setSuccess(users);
-		return new ResponseEntity<>(res,HttpStatus.OK);
-		}
+		return userService.getAllUserInfo();
+	}
 	
 	// 根據userName查詢用戶資訊
 	@Operation(summary = "根據userName查詢用戶資訊")
 	@GetMapping(path="/rawdata/{username}",produces="application/json")
-	public User userQueryByUserName(@PathVariable("username")String username){
-		User user = userRepository.getUserByUserName(username);
-		return user;
+	public ResponseEntity<BaseResponseModel> getUserByUsername(@PathVariable("username")String username){
+		return userService.getUserByUsername(username);
 	}
-	
+
+	// TODO 修改的東西add!!
 	// 根據username修改用戶資料
 	@Operation(summary = "根據username修改用戶資料")
 	@PutMapping(path="/update/{username}")
-	public ResponseEntity<BaseResponse> updateUser(@PathVariable(value="username") String username, @RequestBody UserUpdateDTO updateDTO){
-		Integer update = userRepository.updateUserInfo(username, updateDTO.getEmail());
-		if(Objects.isNull(update) || update <= 0){
-			var res = BaseResponse.builder().code("500").message("更新資料錯誤").build();
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
-		} else {
-			var res = BaseResponse.builder().code("200").message("更新資料成功").build();
-			return new ResponseEntity<>(res, HttpStatus.OK);
-		}
+	public ResponseEntity<BaseResponseModel> updateUser(@PathVariable(value="username") String username, @RequestBody UserUpdateDTO updateDTO){
+		return userService.updateUserByUsername(username, updateDTO);
 	}
 	
-	// 刪除用戶
-//	@Operation(summary = "刪除使用者")
-//	@DeleteMapping("/usersinfo/rawdata/{usersid}/delete")
-//	public String delete(@PathVariable(value="usersid") Integer id){
-//		userRepository.deleteUserById(id);
-//		return "redirect:./";
-//		}
+	// 根據username刪除用戶
+	@Operation(summary = "根據username刪除使用者")
+	@DeleteMapping("/delete/{username}/")
+	public ResponseEntity<BaseResponseModel> deleteUser(@PathVariable(value="username") String username){
+		return userService.deleteUser(username);
+	}
 }
 
