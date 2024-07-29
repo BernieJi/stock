@@ -9,19 +9,22 @@
     	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<!-- 導入FontAwesome -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+		<!-- 導入Axios -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.js"></script>
+		<!-- 導入Vue -->
+		<script src="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.js"></script>
 		<!-- 導入JavaScript 檔案 -->
     	<script type="text/javascript" src="/js/adminpage.js"></script>
     </head>
 
-    <body> 	
+    <body>
     	<div id="app" style="position:relative;top:50px;left:260px">
 			<a href="../index">上一頁回首頁 <i class="fa-solid fa-house-chimney"></i></a>
 			<h1>管理員頁面</h1>
 			<table class="pure-table pure-table-bordered">
 				<thead>
 					<tr>
-						<th>id</th>
-						<th>username</th>
+						<th>使用者名稱</th>
 						<th>email</th>
 						<th>權限</th>
 						<th>賦予管理者權限</th>
@@ -29,14 +32,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td th:text="${users.id}"></td>
-						<td th:text="${users.username}">帳戶名稱</td>
-						<td th:text="${users.email}">Email</td>
-						<td th:text="${users.authority}">權限</td>
-						<td><a type="button" th:href="@{/index/adminpage/admin/{usersid}(usersid=${users.id})}" style="text-decoration:none; border:2px,solid,black">給予admin權限</a></td>
-						<td><a type="button" th:href="@{/index/adminpage/delete(id=${users.id})}" style="text-decoration:none; border:2px,solid,black">刪除用戶</a></td>
-					</tr>
+					<tr v-for="(user,index) in userList" :key="index">
+						<td>{{ user.username }}</td>
+						<td>{{ user.email }}</td>
+						<td>{{ user.role }}</td>
+						<td><a type="button" @click="authorizeUser(user.username)" style="text-decoration:none; border:2px,solid,black">給予admin權限</a></td>
+						<td><a type="button" @click="deleteUser(user.username)"style="text-decoration:none; border:2px,solid,black">刪除用戶</a></td>
+					</tr>	
 				</tbody>
 			</table>  
 		</div>

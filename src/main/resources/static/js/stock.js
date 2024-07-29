@@ -31,7 +31,6 @@ $(document).ready(function(){
 					}
 				})
 					.then((response)=>{
-						console.log('調整的日期:',response.data.data)
 						this.lastStockDate = response.data.data
 					}
 				)	

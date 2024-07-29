@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequiredArgsConstructor
 public class UserRestController {
 
+	@Autowired
 	private UserService userService;
 	
 	// 查詢所有用戶資訊

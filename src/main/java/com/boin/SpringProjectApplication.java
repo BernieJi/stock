@@ -25,7 +25,7 @@ import com.google.gson.reflect.TypeToken;
 
 @SpringBootApplication
 public class SpringProjectApplication {
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(SpringProjectApplication.class, args);
 	}
