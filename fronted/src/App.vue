@@ -26,7 +26,7 @@ const getInfo = (()=>{
 <template>
   <header>
 
-    <button @click="getInfo">按一下</button>
+    <button class="border-2 text-red-700 p-2" @click="getInfo">按一下</button>
     
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 

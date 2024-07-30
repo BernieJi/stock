@@ -14,7 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,19 +66,30 @@ public class AuthenticationService {
        用戶登入
      */
     public ResponseEntity<AuthenticationResponse> login(LoginRequest request){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(), request.getPassword()
-                )
-        );
         User user = userRepository.getUserByUserName(request.getUsername());
-        if(Objects.isNull(user)){
+        if (Objects.isNull(user)) {
             AuthenticationResponse res = AuthenticationResponse.builder().code("400").message("未找到此用戶").token("").build();
-            return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
         }
-        String jwt = jwtService.generateToken(user);
-        AuthenticationResponse res = AuthenticationResponse.builder().code("200").message("成功登入").token(jwt).build();
-        return new ResponseEntity<>(res,HttpStatus.OK);
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(), request.getPassword()
+                    )
+            );
+
+            String jwt = jwtService.generateToken(user);
+            AuthenticationResponse res = AuthenticationResponse.builder().code("200").message("成功登入").token(jwt).build();
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        } catch (BadCredentialsException e) {
+            // 密碼错误
+            AuthenticationResponse res = AuthenticationResponse.builder()
+                    .code("401")
+                    .message("密碼错误")
+                    .token("")
+                    .build();
+            return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @Transactional

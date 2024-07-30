@@ -3,8 +3,9 @@ package com.boin.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -12,14 +13,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-
-	private final JwtAuthenticationFilter jwtAuthFilter;
+	private final JwtService jwtService;
 
 	public final UserDetailsService userDetailsService;
 
@@ -27,10 +31,15 @@ public class SecurityConfig {
 
 	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
+	private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		AuthenticationManager authenticationManager = authenticationManager(http.getSharedObject(AuthenticationConfiguration.class));
 		// White Lists
-		String[] permitted = {"/**","/api/v1/auth/**","/loginpage","/fail","/index","/html/**","/css/**","/js/**","/images/**"};
+		String[] permitted = {"/api/v1/auth/**","/loginpage","/fail","/index","/html/**","/css/**","/js/**","/images/**"};
+
+		JwtAuthenticationFilter jwtAuthFilter = new JwtAuthenticationFilter(jwtService, userDetailsService, skipPathRequestMatcher(), customAuthenticationFailureHandler);
 		http
 				.csrf()
 				.disable()
@@ -46,7 +55,7 @@ public class SecurityConfig {
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 				.exceptionHandling()
-				//.authenticationEntryPoint(customAuthenticationEntryPoint)
+				.authenticationEntryPoint(customAuthenticationEntryPoint)
 				.and()
 				.logout()
 				.logoutSuccessUrl("/loginpage")
@@ -55,10 +64,25 @@ public class SecurityConfig {
 				.rememberMe()
 				.userDetailsService(userDetailsService)
 				.tokenValiditySeconds(60 * 60 * 3);
-
 		return http.build();
 	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
+
+	@Bean
+	public RequestMatcher skipPathRequestMatcher() {
+		String[] permitted = {"/api/v1/auth/**", "/loginpage", "/fail", "/index", "/html/**", "/css/**", "/js/**", "/images/**"};
+		return new OrRequestMatcher(
+				Arrays.stream(permitted).map(AntPathRequestMatcher::new).toArray(RequestMatcher[]::new)
+		);
+	}
+
 }
+
+
 
 // 表單提交
 //http.formLogin()
