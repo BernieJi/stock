@@ -40,12 +40,11 @@ public class UserRestController {
 		return userService.getUserByUsername(username);
 	}
 
-	// TODO 修改的東西add!!
-	// 根據username修改用戶資料
+	// TODO根據username修改用戶資料
 	@Operation(summary = "根據username修改用戶資料")
 	@PutMapping(path="/update/{username}")
-	public ResponseEntity<BaseResponseModel> updateUser(@PathVariable(value="username") String username, @RequestBody UserUpdateDTO updateDTO){
-		return userService.updateUserByUsername(username, updateDTO);
+	public ResponseEntity<BaseResponseModel> updateUser(@PathVariable(value="username") String username, @RequestParam("email") String email, @RequestParam("uploadFileUrl") String uploadFileUrl){
+		return userService.updateUserByUsername(username, email, uploadFileUrl);
 	}
 	
 	// 根據username刪除用戶

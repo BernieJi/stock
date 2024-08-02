@@ -10,6 +10,7 @@ import com.boin.entity.Authentication.RegisterRequest;
 import com.boin.entity.User;
 import com.boin.repository.TokenRepository;
 import com.boin.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class AuthenticationService {
      * 用戶註冊
      *
      */
-    public ResponseEntity<AuthenticationResponse> register(RegisterRequest request){
+    public ResponseEntity<AuthenticationResponse> register(HttpServletRequest httpServletRequest, RegisterRequest request){
         try {
             String encodedPassword = passwordEncoder.encode(request.getPassword());
             User user = new User(UUID.randomUUID().toString(), request.getUsername(), encodedPassword, request.getEmail(), request.getRole());
@@ -51,7 +52,8 @@ public class AuthenticationService {
             ConfirmationToken token = new ConfirmationToken(UUID.randomUUID().toString(), user.getId(), LocalDateTime.now(), LocalDateTime.now().plusMinutes(15));
             tokenRepository.addToken(token);
             // TODO send confirmation email
-            String link = "http://localhost:7878/api/v1/auth/confirm?token=" + token.getToken();
+            String domain = httpServletRequest.getServerName();
+            String link = domain + ":7878/api/v1/auth/confirm?token=" + token.getToken();
             emailSender.send(request.getEmail(), buildEmail(request.getUsername(), link));
 
             AuthenticationResponse res = AuthenticationResponse.builder().code("200").message("成功註冊").token(jwt).build();

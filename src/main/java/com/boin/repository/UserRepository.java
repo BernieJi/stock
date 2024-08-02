@@ -42,7 +42,7 @@ public class UserRepository {
      */
     public User getUserByUserName(String username) {
         final String sql = """
-                SELECT id, username, password, email, role, locked, enabled
+                SELECT id, username, password, email, image_url, role, locked, enabled
                 FROM user
                 where username = ?
                 """;
@@ -113,16 +113,35 @@ public class UserRepository {
 
     /*
      *
-     *  修改會員的信箱資料
+     *  查詢會員大頭照url
      *
      */
-    public Integer updateUserInfo(String username, String email) {
+    public String getUserImage(String username) {
         final String sql = """
-                UPDATE user SET email = ? 
+                SELECT image_url
+                FROM user
                 WHERE username = ?
                 """;
         try {
-            return jdbcTemplate.update(sql, email, username);
+            return jdbcTemplate.queryForObject(sql, new Object[]{ username }, String.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     *
+     *  修改會員資料
+     *
+     */
+    public Integer updateUserInfo(String username, String email, String uploadFileUrl) {
+        final String sql = """
+                UPDATE user SET email = ? , image_url = ?
+                WHERE username = ?
+                """;
+        try {
+            return jdbcTemplate.update(sql, email, uploadFileUrl, username);
         } catch (Exception e) {
             e.printStackTrace();
         }

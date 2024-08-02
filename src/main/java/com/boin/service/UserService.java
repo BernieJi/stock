@@ -2,10 +2,12 @@ package com.boin.service;
 
 import com.boin.common.BaseResponse;
 import com.boin.common.BaseResponseModel;
+import com.boin.config.StorageService;
 import com.boin.entity.DTO.UserUpdateDTO;
 import com.boin.entity.User;
 import com.boin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ import java.util.Objects;
 public class UserService {
 
 	private final UserRepository userRepository;
+
+	private final StorageService storageService;
 
 	/*
 	 * 查詢所有會員資訊
@@ -60,9 +64,15 @@ public class UserService {
 	 * @Date   2024/7/20
 	 *
 	 */
-	public ResponseEntity<BaseResponseModel> updateUserByUsername(String username, UserUpdateDTO updateDTO){
+	public ResponseEntity<BaseResponseModel> updateUserByUsername(String username, String email, String uploadFileUrl){
 		BaseResponseModel res = new BaseResponseModel();
-		Integer update = userRepository.updateUserInfo(username, updateDTO.getEmail());
+		// 先判斷用戶是否有更新大頭照
+		if(!Strings.isBlank(uploadFileUrl)){
+			String oldFileName = userRepository.getUserImage(username);
+			// 先刪除舊的大頭照
+			storageService.deleteFile("boin-bucket_1", oldFileName);
+		}
+		Integer update = userRepository.updateUserInfo(username, email, uploadFileUrl);
 		if(Objects.isNull(update) || update <= 0){
 			res.setFail("500","更新資料錯誤，請聯絡管理員");
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);

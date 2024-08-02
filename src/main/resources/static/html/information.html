@@ -20,6 +20,11 @@
 				height: 500px;
 				border: 3px dotted black;
 				padding:20px;
+				position: fixed;
+				top: 50px;
+				left:260px;
+				display: flex;
+				justify-content: space-between;
 			}
 		</style>
 	</head>
@@ -29,17 +34,29 @@
 			<a href="/index">按此回到首頁 <i class="fa-solid fa-house"></i></a>
 		</div>
 		
-		<div id="app" style="position:fixed;top:50px;left:260px">
-			<h1>修改個人資訊</h1>
-			帳號：<input type="text" :value="user.username" disabled>
-			<br />
-			<br />
-			信箱：<input type="text" v-model="user.email">
-			<br />
-			<br />
-			<button @click="update">保存編輯</button>
-			<br />
-			<br />
+		<div id="app">
+			<div class="left">
+				<h1>修改個人資訊</h1>
+				帳號：<input type="text" :value="user.username" disabled>
+				<br />
+				<br />
+				信箱：<input type="text" v-model="user.email">
+				<br />
+				<br />
+				<input type="file" id="fileInput" @change="previewImage">
+				<br />
+				<!-- 預覽上傳圖片區域-->
+				<img v-if="previewImageUrl" :src="previewImageUrl" alt="Image preview" style="max-width: 50px; max-height: 50px;">
+				<br />
+				<button @click="update">保存編輯</button>
+			</div>
+
+			<div class="right">
+				<img :src="user.imageUrl" alt="person pic" style="width:100px; height:100px">
+			</div>
+			
+			
+			
         </div>     
     </body>
 </html>

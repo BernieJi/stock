@@ -11,6 +11,7 @@ import com.boin.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +38,8 @@ public class AuthController {
 	// 註冊頁面
 	@Operation(summary = "註冊api",description = "註冊時使用api")
 	@PostMapping(path="/register", produces = "application/json")
-	public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
-		return authenticationService.register(request);
+	public ResponseEntity<AuthenticationResponse> register(HttpServletRequest httpServletRequest, @RequestBody RegisterRequest request) {
+		return authenticationService.register(httpServletRequest, request);
 	}
 
 	// 註冊頁面中查詢是否已有相同username

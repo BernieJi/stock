@@ -1,13 +1,18 @@
 $(document).ready(function(){
 
+   
     Vue.createApp({
         data:function(){
             return {
-                user:{id:'',username:'',password:'',email:'',authority:''}
+                user:{id:'', username:'', password:'', email:'', imageUrl:'', authority:''},
+                previewImageUrl:'',
+                uploadImageUrl:'',
+                selectedFile: null,
+                isFileSelected: false,
             }
         },
         methods :{
-            query:function(){
+            query(){
                 let username = sessionStorage.getItem("username");
                 var serviceURL = '/api/v1/user/rawdata/'+ username;
                 axios.get(serviceURL,{
@@ -16,35 +21,74 @@ $(document).ready(function(){
                     }
                 })
                     .then((response) => {
-                    // console.log(response);
-                    this.user.id = response.data.id;
-                    this.user.username = response.data.username;
-                    this.user.password = response.data.password;
-                    this.user.email = response.data.email;
+                    console.log(response)
+                    this.user.id = response.data.data.id;
+                    this.user.username = response.data.data.username;
+                    this.user.password = response.data.data.password;
+                    this.user.email = response.data.data.email;
+                    this.user.imageUrl = "https://storage.cloud.google.com/" + response.data.data.imageUrl;
                     }
                 )	
             },
 
-            update:function(){
+            async update(){
+                // 有未上傳的圖片須先上傳
+                if (this.isFileSelected) {
+                    await this.uploadFile();
+                }
                 var serviceURL = '/api/v1/user/update/'+ this.user.username;
-                axios.put(serviceURL,
-                    {email:this.user.email},
-                    {
+                
+                let updateDTO = {
+                    email: this.user.email,
+                    uploadFileUrl: this.uploadImageUrl,
+                }
+                axios.put(serviceURL, updateDTO, {
                         headers:{
-                            'Authorization' : sessionStorage.getItem("Authorization")	
+                            'Authorization' : sessionStorage.getItem("Authorization"),
+                            'Content-Type': 'multipart/form-data',	
                         }
                     })
-                .then(function (response) {
-                     console.log(response);
-                     if(response.status === 200){
-                        alert('編輯成功！');
-                     } else {
-                        alert('編輯錯誤 請聯絡管理員')
-                     }
+                .then((response) => {
+                    alert('編輯成功！');
+                    this.query();
+                     
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     console.log(error);
                 });
+            },
+
+            previewImage(event) {
+                const file = event.target.files[0];
+                if (file) {
+                  this.previewImageUrl = URL.createObjectURL(file);
+                  console.log('預覽的url為',this.previewImageUrl)
+                  this.selectedFile = file;
+                  this.isFileSelected = true;
+                }
+            },
+
+            async uploadFile() {
+                if (this.selectedFile) {
+                    const formData = new FormData();
+                    formData.append('file', this.selectedFile);
+                    formData.append('folder', 'image/person');
+            
+                    await axios.post('/upload', formData, {
+                        headers: {
+                            'Authorization': sessionStorage.getItem("Authorization"),
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    })
+                    .then((res) => {
+                        this.uploadImageUrl = res.data.message;
+
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('File upload failed.');
+                    });
+                }
             }
         },
         mounted:function(){

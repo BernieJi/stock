@@ -23,6 +23,8 @@ import java.util.List;
 
 		private String email;
 
+		private String imageUrl;
+
 		private String role;
 
 		private Boolean locked = false;

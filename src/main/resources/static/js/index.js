@@ -20,8 +20,8 @@ $(document).ready(function(){
 			let nameSpanTag = document.getElementsByTagName("span")[0];
 			let authoritySpanTag = document.getElementsByTagName("span")[1];
 			let timeSpan = document.getElementsByTagName("span")[2];
-			nameSpanTag.innerHTML = res.data.username;
-			authoritySpanTag.innerHTML = res.data.role;
+			nameSpanTag.innerHTML = res.data.data.username;
+			authoritySpanTag.innerHTML = res.data.data.role;
 			timeSpan.innerHTML = new Date().toLocaleString();
 		})
 		.catch(
