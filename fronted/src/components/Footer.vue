@@ -2,9 +2,9 @@
 </script>
 
 <template>
-    <div class="w-full mx-auto my-0 border-b border-amber-400">
-        裡面是一些footer資訊
-    </div>
+    <footer class="bg-[#D1CCC4] text-black p-4">
+        <p class="text-center">© 2024 stock Company</p>
+    </footer>
 </template>
 
 

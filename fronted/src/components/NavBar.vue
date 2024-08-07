@@ -14,56 +14,60 @@ const clickMenu = () => {
 </script>
 
 <template>
-  <div class="w-full mx-auto my-0 border-b border-amber-400">
-    <nav class="w-full bg-custom-color flex justify-between items-center">
+  <div class="w-full mx-auto my-0 border-b border-white">
+    <nav class="w-full flex justify-between items-center bg-[#D1CCC4]">
+      <!-- 首頁小圖 -->
       <div class="m-5">
-        <RouterLink to="/about">
-          <img src="../assets/image/NavBar/logo.png" alt="logo" class="w-10 h-10" />
+        <RouterLink to="/about" class="flex items-center hover:bg-[#FFFFE0]">
+          <img src="../assets/image/NavBar/logo.png" alt="logo" class="w-10 h-10 m-2" />
+          <span class="text-black hover:font-bold">StockSphere</span>
         </RouterLink>
+        
       </div>
+
+      <!-- 導覽列(手機版狀態下隱藏) -->
       <ul class="hidden md:flex justify-between items-center">
         <li class="m-5">
-          <RouterLink to="/about" class="text-[#6F6D55] font-bold">平台介紹</RouterLink>
+          <RouterLink to="/about" class="text-black hover:bg-[#FFFFE0] hover:font-bold">平台介紹</RouterLink>
         </li>
-        <li v-if="isMember" class="m-5">
-          <RouterLink to="/record" class="text-[#6F6D55]">我的紀錄</RouterLink>
-        </li>
+
         <li class="m-5">
-          <RouterLink to="/randomfood" class="text-[#6F6D55]">今天吃什麼</RouterLink>
+          <RouterLink to="/stock" class="text-black hover:bg-[#FFFFE0] hover:font-bold">股票資訊</RouterLink>
         </li>
+
         <li class="m-5">
-          <RouterLink to="/article" class="text-[#6F6D55]">美食文章</RouterLink>
+          <RouterLink to="/forum" class="text-black hover:bg-[#FFFFE0] hover:font-bold">討論區</RouterLink>
         </li>
+
         <li v-if="isMember" class="m-5">
-          <RouterLink to="/" class="text-[#6F6D55]">登出</RouterLink>
+          <RouterLink to="/watchlist" class="text-black hover:bg-[#FFFFE0] hover:font-bold">我的追蹤</RouterLink>
         </li>
+        
+        <li v-if="isMember" class="m-5">
+          <RouterLink to="/logout" class="text-black hover:bg-[#FFFFE0] hover:font-bold">登出</RouterLink>
+        </li>
+
         <li v-else class="m-5">
-          <RouterLink to="/login" class="text-[#6F6D55]">登入/註冊</RouterLink>
+          <RouterLink to="/login" class="text-black hover:bg-[#FFFFE0] hover:font-bold">登入/註冊</RouterLink>
         </li>
         <li v-if="isMember" class="m-5">
-          <RouterLink to="/friendlist">
-            <img src="../assets/images/NavBar/Users.png" alt="users" />
+          <RouterLink to="/info">
+            <img src="../assets/image/NavBar/user.png" alt="user" class="w-10 h-10 hover:bg-[#FFFFE0]" />
           </RouterLink>
         </li>
-        <li v-if="isMember" class="m-5">
-          <RouterLink to="/">
-            <img src="../assets/images/NavBar/UserCircle.png" alt="personal" />
-          </RouterLink>
-        </li>
-        <li v-if="isNotice" class="m-5 h-auto">
-          <RouterLink to="/friend">
-            <img src="../assets/images/NavBar/BellRinging.png" alt="alert" />
-          </RouterLink>
-        </li>
+       
       </ul>
+
+      <!-- 手機版功能按鈕 -->
       <div class="m-5 md:hidden">
         <button v-if="!isMenuOpen" @click="clickMenu">
-          <img src="../assets/images/NavBar/list.png" alt="list" />
+          <img src="../assets/image/NavBar/list.png" alt="list" />
         </button>
 
+        <!-- 關閉手機版功能頁 -->
         <button v-else @click="clickMenu">
           <img
-            src="../assets/images/NavBar/close.png"
+            src="../assets/image/NavBar/close.png"
             alt="close"
             style="width: 30px; height: 30px"
           />
@@ -71,56 +75,53 @@ const clickMenu = () => {
       </div>
     </nav>
 
+    <!-- 手機版才會有的向下展開清單列 -->
     <div class="w-auto h-auto">
-      <!-- 手機版才會有的清單列 -->
+
       <!-- 遮罩 -->
       <div
         v-if="isMenuOpen"
-        class="bg-[#000000] opacity-20 fixed top-1/5 left-0 w-2/3 h-screen z-50"
+        class="bg-black opacity-20 fixed top-1/5 left-0 w-2/3 h-screen z-50"
       ></div>
 
-      <transition name="sidebar">
         <div
           v-if="isMenuOpen"
-          class="bg-custom-color fixed top-1/5 right-0 w-1/3 h-screen z-50 md:hidden"
+          class="bg-[#D1CCC4] fixed top-1/5 right-0 w-1/3 h-screen z-50 md:hidden"
         >
           <ul class="h-full">
             <li
               v-if="!isMember"
-              class="m-5 flex text-center cursor-pointer hover:bg-custom-hover-color"
+              class="m-5 flex text-center cursor-pointer hover:bg-[#FFFFE0]"
             >
-              <RouterLink to="/login" class="text-[#6F6D55] text-center">登入/註冊</RouterLink>
+              <RouterLink to="/login" class="text-black text-center">登入/註冊</RouterLink>
             </li>
-            <li v-if="isNotice" class="m-5 text-center bg-custom-alert-color">
-              <RouterLink to="/friend" class="text-[#6F6D55]">
-                好友送美食來囉
-                <img src="../assets/images/NavBar/Cheers.png" class="inline" alt="cheer" />
-              </RouterLink>
+            
+            <li class="m-5 text-center cursor-pointer hover:bg-[#FFFFE0]">
+              <RouterLink to="/about" class="text-black hover:bg-[#FFFFE0]"> 平台介紹 </RouterLink>
             </li>
-            <li class="m-5 text-center cursor-pointer hover:bg-custom-hover-color">
-              <RouterLink to="/about" class="text-[#6F6D55] transition-none"> 平台介紹 </RouterLink>
+
+            <li class="m-5 text-center cursor-pointer hover:bg-[#FFFFE0]">
+              <RouterLink to="/" class="text-black hover:bg-[#FFFFE0]"> 股票資訊 </RouterLink>
             </li>
-            <li v-if="isMember" class="m-5 text-center cursor-pointer hover:bg-custom-hover-color">
-              <RouterLink to="/record" class="text-[#6F6D55]"> 我的紀錄 </RouterLink>
+
+            <li class="m-5 text-center cursor-pointer hover:bg-[#FFFFE0]">
+              <RouterLink to="/article" class="text-black hover:bg-[#FFFFE0]"> 討論區 </RouterLink>
             </li>
-            <li class="m-5 text-center cursor-pointer hover:bg-custom-hover-color">
-              <RouterLink to="/" class="text-[#6F6D55]"> 今天吃什麼 </RouterLink>
+
+            <li v-if="isMember" class="m-5 text-center cursor-pointer hover:bg-[#FFFFE0]">
+              <RouterLink to="/record" class="text-black hover:bg-[#FFFFE0]"> 我的追蹤 </RouterLink>
             </li>
-            <li class="m-5 text-center cursor-pointer hover:bg-custom-hover-color">
-              <RouterLink to="/article" class="text-[#6F6D55]"> 美食文章 </RouterLink>
+            
+            <li class="m-5 text-center cursor-pointer hover:bg-[#FFFFE0]">
+              <RouterLink to="/info" class="text-black hover:bg-[#FFFFE0]"> 個人資料 </RouterLink>
             </li>
-            <li class="m-5 text-center cursor-pointer hover:bg-custom-hover-color">
-              <RouterLink to="/friendlist" class="text-[#6F6D55]"> 我的好友 </RouterLink>
-            </li>
-            <li class="m-5 text-center cursor-pointer hover:bg-custom-hover-color">
-              <RouterLink to="/info" class="text-[#6F6D55]"> 個人資料 </RouterLink>
-            </li>
-            <li v-if="isMember" class="m-5 text-center cursor-pointer hover:bg-custom-hover-color">
-              <RouterLink to="/logout" class="text-[#6F6D55]"> 登出 </RouterLink>
+            
+            <li v-if="isMember" class="m-5 text-center cursor-pointer hover:bg-[#FFFFE0]">
+              <RouterLink to="/logout" class="text-black hover:bg-[#FFFFE0]"> 登出 </RouterLink>
             </li>
           </ul>
         </div>
-      </transition>
+
     </div>
   </div>
 </template>
