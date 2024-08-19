@@ -26,20 +26,40 @@ public class WatchListRepository {
     private final Logger logger = (Logger) LogManager.getLogger();
 
     /*
-     *  根據會員id查詢追蹤的股票
-     *  @Date   2024/4/10
+     *  根據股票代碼加入追蹤列表
+     *  @Date   2024/8/7
      *  @Author Boin
      */
-    public List<Stock> getWatchStockByUserId(int userId){
+    public Integer addStockToWatchList(Integer watchlistId, String userId, String stockCode){
         final String sql = """
-                SELECT s.*
-                FROM watch_list w JOIN stock s 
-                ON w.stock_code = s.code
-                WHERE w.user_id = ?
-                ORDER BY s.date;
+                INSERT into watchlist_stocks(watchlist_id, user_id, stock_code)
+                VALUES(?,?,?) 
                 """;
         try {
-            return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Stock.class),userId);
+            return jdbcTemplate.update(sql, watchlistId, userId, stockCode);
+        } catch (Exception e) {
+            logger.error(e.toString());
+        }
+        return null;
+    }
+
+    /*
+     *  根據watchlistId和會員id查詢追蹤的股票資訊
+     *  @Date   2024/8/7
+     *  @Author Boin
+     */
+    public List<Stock> getStockByWatchlistIdAndUserId(Integer watchlistId, String userId){
+        final String sql = """
+                SELECT s.* 
+                FROM watchlist_stocks ws
+                JOIN stock s ON ws.stock_code = s.code
+                JOIN user u ON ws.user_id = u.id
+                WHERE ws.watchlist_id = ? AND u.id= ?
+                AND s.date = (SELECT MAX(date) FROM stock)
+                ORDER BY s.date DESC
+                """;
+        try {
+            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Stock.class), watchlistId, userId);
         } catch (Exception e) {
             logger.error(e.toString());
         }
@@ -51,21 +71,21 @@ public class WatchListRepository {
      *  Author Boin
      *  Date   2024/4/7
      */
-    public List<Stock> getStockInfo(int currentPage , int pageSize){
-        int startIndex = (currentPage - 1) * pageSize;
-        final String sql = """
-                SELECT * FROM stock 
-                ORDER BY date DESC, code asc
-                LIMIT ?,?
-                """;
-        try {
-            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Stock.class), startIndex, startIndex + 100);
-        } catch (EmptyResultDataAccessException ex){
-            return null;
-        } catch (Exception e) {
-           logger.error(e.toString());
-        }
-        return null;
-    }
+//    public List<Stock> getStockInfo(int currentPage , int pageSize){
+//        int startIndex = (currentPage - 1) * pageSize;
+//        final String sql = """
+//                SELECT * FROM stock
+//                ORDER BY date DESC, code asc
+//                LIMIT ?,?
+//                """;
+//        try {
+//            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Stock.class), startIndex, startIndex + 100);
+//        } catch (EmptyResultDataAccessException ex){
+//            return null;
+//        } catch (Exception e) {
+//           logger.error(e.toString());
+//        }
+//        return null;
+//    }
 
 }
