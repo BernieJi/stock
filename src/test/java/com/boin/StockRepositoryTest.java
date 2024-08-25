@@ -30,4 +30,10 @@ class StockRepositoryTest {
         System.out.println(res);
     }
 
+    @Test
+    void addStockIntoWachlist(){
+        Integer isSuccessful = stockRepository.addStockToWatchList("c5bbf3f2-0eb8-4a66-8094-a263146bd329","追蹤表1", "0056");
+        Assertions.assertNotNull(isSuccessful);
+    }
+
 }

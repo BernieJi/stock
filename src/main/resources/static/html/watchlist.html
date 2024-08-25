@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.themeleaf.org">
     <head>
-        <title>Stock Information</title>
+        <title>WatchList Information</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- 導入JQuery -->
+		<!-- 導入JQuery -->
     	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!-- 導入Table CSS -->
         <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
@@ -18,21 +18,19 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.js"></script>
 		<!-- 導入Vue -->
 		<script src="https://cdn.jsdelivr.net/npm/vue@3.1.1/dist/vue.global.min.js"></script>
-		<!-- 引入 Google Charts 库 -->
-		<script src="https://www.gstatic.com/charts/loader.js"></script>
 		<!-- 導入JavaScript 檔案 -->
-    	<script type="text/javascript" src="/js/stockInfo.js"></script>
+    	<script type="text/javascript" src="/js/watchlist.js"></script>
 	</head>
 
     <body>
+		<div id="app" style="position:fixed;left:260px">
+			<a href="/index">按此回到首頁 <i class="fa-solid fa-house"></i></a>
 		
-		<div id="app" style="position:relative;top:50px;left:50px">
-			<a href="/html/stock.html">上一頁回股票總覽</a>
-			
-			<table id="myTable" class="pure-table pure-table-bordered">
+		<div style="position:fixed;top:50px;left:260px">
+			<h1>追蹤股票資訊</h1>
+			<table class="pure-table pure-table-bordered">
 				<thead>
 					<tr>
-						<th>日期</th>
 						<th>股票代號</th>
 						<th>股票名稱</th>
 						<th>交易數量</th>
@@ -40,39 +38,30 @@
 						<th>股票收盤價</th>
 						<th>當日最高價</th>
 						<th>當日最低價</th>
-						<th>加入自選</th>
+						<th>移除自選</th>
 					</tr>
 				</thead>
-
 				<tbody>
-					<tr>
-						<td>{{ lastStockDate }}</td>
+					<tr v-for="(stock,index) in followedStock" :key="index">
 						<td>{{ stock.code }}</td>
 						<td>{{ stock.name }}</td>
-						<td>{{ stock.volume }}</td>
+						<td>{{ stock.tradeVolume }}</td>
 						<td>{{ stock.openingPrice }}</td>
 						<td>{{ stock.closingPrice }}</td>
 						<td>{{ stock.highestPrice }}</td>
 						<td>{{ stock.lowestPrice }}</td>
 						<td>
-							<a type="button" @click="addStockToWatchlist()"><i class="fa-solid fa-circle-plus"></i></a>
+							<button @click="deleteStockFromWatchlist(stock.code)">移除追蹤</button>
 						</td>
 					</tr>
 				</tbody>
-
-				
 			</table>
-
-			<div id="chart_div" style="width: 900px; height: 500px;">
-				繪製K線圖的地方
-			</div>
-
-        </div> 
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
+        </div>  
+	
+	</div>
+     
+       	<footer style="position:fixed;bottom:0px;left:600px">
+    		<p>© Financial System 2022/06/06 0912-345-678</p>
+  		</footer> 
     </body>
 </html>

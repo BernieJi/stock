@@ -37,7 +37,7 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		AuthenticationManager authenticationManager = authenticationManager(http.getSharedObject(AuthenticationConfiguration.class));
 		// White Lists
-		String[] permitted = {"/api/v1/auth/**","/loginpage","/fail","/index","/html/**","/css/**","/js/**","/images/**"};
+		String[] permitted = {"/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**","/api/v1/auth/**","/loginpage","/fail","/index","/html/**","/css/**","/js/**","/images/**"};
 
 		JwtAuthenticationFilter jwtAuthFilter = new JwtAuthenticationFilter(jwtService, userDetailsService, skipPathRequestMatcher(), customAuthenticationFailureHandler);
 		http

@@ -26,7 +26,7 @@ $(document).ready(function(){
                     this.user.username = response.data.data.username;
                     this.user.password = response.data.data.password;
                     this.user.email = response.data.data.email;
-                    this.user.imageUrl = "https://storage.cloud.google.com/" + response.data.data.imageUrl;
+                    this.user.imageUrl = "https://storage.cloud.google.com/boin-bucket_1/" + response.data.data.imageUrl;
                     }
                 )	
             },

@@ -10,6 +10,7 @@ import com.boin.entity.Authentication.RegisterRequest;
 import com.boin.entity.User;
 import com.boin.repository.TokenRepository;
 import com.boin.repository.UserRepository;
+import com.boin.repository.WatchListRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
     private final EmailSender emailSender;
+    private final WatchListRepository watchListRepository;
 
     /*
      *
@@ -55,6 +57,8 @@ public class AuthenticationService {
             String domain = httpServletRequest.getServerName();
             String link = domain + ":7878/api/v1/auth/confirm?token=" + token.getToken();
             emailSender.send(request.getEmail(), buildEmail(request.getUsername(), link));
+            // 創建預設的追蹤表
+            watchListRepository.defaultAddWatchList(user.getId());
 
             AuthenticationResponse res = AuthenticationResponse.builder().code("200").message("成功註冊").token(jwt).build();
             return new ResponseEntity<>(res, HttpStatus.OK);

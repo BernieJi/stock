@@ -16,7 +16,8 @@ $(document).ready(function(){
 		}
 	})
 		.then(res =>{
-			console.log(res);
+			let userId = res.data.data.id;
+			sessionStorage.setItem("userId",userId);
 			let nameSpanTag = document.getElementsByTagName("span")[0];
 			let authoritySpanTag = document.getElementsByTagName("span")[1];
 			let timeSpan = document.getElementsByTagName("span")[2];

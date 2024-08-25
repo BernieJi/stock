@@ -3,6 +3,7 @@ package com.boin.restController;
 import java.util.List;
 
 import com.boin.common.BaseResponseModel;
+import com.boin.entity.DTO.AddStockToWatchListDTO;
 import com.boin.repository.UserRepository;
 import com.boin.service.StockService;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,6 @@ public class StockRestController {
 	private final StockService stockService;
 
 	private final UserRepository userRepository;
-
-	// private WatchListRepository watchListRepository;
 
 	// 查詢最近一個股票營業日
 	@Operation(summary = "查詢最近一個股票營業日")
@@ -64,32 +63,17 @@ public class StockRestController {
 		return stockService.getStockHistoryInfoByCode(code);
 	}
 
-	// 將此檔股票加入追蹤清單
-	// 個股加入追蹤清單頁面
-//	@Operation(summary = "根據stockCode與username將股票加入追蹤清單")
-//	@PostMapping("/stockinfo/rawdata/{stockcode}/{username}/addtowatchlist")
-//	public String addToWatchList(@PathVariable("stockcode") String stockcode,@PathVariable("username")String username) {
-//		Stock stock = stockRepository.getByCode(stockcode);
-//		CustomUser users = userRepository.getUserByUserName(username);
-//		WatchList watchList = watchListRepository.getByUsersId(users.getId());
-//		if(watchList != null) {
-//			watchList.getStocks().add(stock);
-//		} else {
-//			watchList = new WatchList();
-//			// watchList.setUsers(users);
-//			watchList.getStocks().add(stock);
-//		}
-//		watchListRepository.save(watchList);
-//		return "加入追蹤成功";
-//		}
-//
-//	// 刪除股票
-//	@Operation(summary = "刪除股票")
-//	@DeleteMapping("/stockinfo/rawdata/{stockcode}/delete")
-//	public String delete(@PathVariable(value="stockcode") String stockcode){
-//		Stock stock = stockRepository.getByCode(stockcode);
-//		stockRepository.delete(stock);
-//		return "redirect:./";
-//		}
+	/*
+	* 	將此檔股票加入追蹤清單
+	* 	@Author Boin
+	* 	@Date   2024/8/22
+	*
+	*/
+	@Operation(summary = "根據userid與追蹤清單名字將股票加入追蹤清單")
+	@PostMapping("/addtowatchlist")
+	public ResponseEntity<BaseResponseModel> addToWatchList(@RequestBody AddStockToWatchListDTO addStockToWatchListDTO) {
+		return stockService.saveStockToWatchList(addStockToWatchListDTO.getUserId(),addStockToWatchListDTO.getWatchlistName(), addStockToWatchListDTO.getCode());
+		}
+
 }
 

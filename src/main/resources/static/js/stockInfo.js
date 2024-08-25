@@ -51,6 +51,28 @@ $(document).ready(function(){
 					}
 				)	
 			},
+			addStockToWatchlist:function(){					
+				let serviceURL = '/api/v1/stock/addtowatchlist';
+				axios.post(serviceURL,
+					{
+						userId: sessionStorage.getItem("userId"),
+						// 這裡要再做修改
+						watchlistName: '追蹤表1',
+						code: code,
+					},
+					{
+						headers:{
+							'Authorization' : sessionStorage.getItem("Authorization")
+						}
+					}	
+				)
+					.then((response)=>{
+					alert('加入追蹤成功！')
+					console.log(response);
+					console.log('加入追蹤成功！')
+					}
+				)	
+			},
 			drawChart: function() {
 				google.charts.load('current', {'packages':['corechart']});
 				var historyData = this.historyDataList;

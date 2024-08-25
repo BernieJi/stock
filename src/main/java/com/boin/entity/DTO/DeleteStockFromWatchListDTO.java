@@ -1,4 +1,4 @@
-package com.boin.entity;
+package com.boin.entity.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,19 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WatchList {
-
-	private Integer id;
+public class DeleteStockFromWatchListDTO {
 
     private String userId;
 
-	private String name;
-
+    private String stockCode;
 }
-
-
-
-
-
-
-

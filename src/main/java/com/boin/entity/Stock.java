@@ -24,6 +24,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Stock {
 
+		public String date;
+
 	    public String code;
 	 	
 	    public String name;

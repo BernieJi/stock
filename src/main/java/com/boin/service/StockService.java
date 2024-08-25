@@ -65,7 +65,10 @@ public class StockService {
 		return new ResponseEntity<>(res,HttpStatus.OK);
 	}
 
-	// 根據股票代號查詢stock資訊
+	/* 	根據股票代號查詢stock資訊
+	 *	author Boin
+	 *	Date   2024/4/7
+	 */
 	public ResponseEntity<BaseResponseModel> getStockByCode(String code){
 		BaseResponseModel res = new BaseResponseModel();
 		Stock stock = stockRepository.getStockByCode(code);
@@ -77,7 +80,10 @@ public class StockService {
 		return new ResponseEntity<>(res,HttpStatus.OK);
 	}
 
-	// 根據股票代號查詢stock歷史資訊
+	/* 	根據股票代號查詢stock歷史資訊
+	 *	author Boin
+	 *	Date   2024/4/7
+	 */
 	public ResponseEntity<BaseResponseModel> getStockHistoryInfoByCode(String code){
 		BaseResponseModel res = new BaseResponseModel();
 		List<StockChartData> stockHistoryInfo = stockRepository.getStockHistoryInfoByCode(code);
@@ -89,9 +95,27 @@ public class StockService {
 		return new ResponseEntity<>(res,HttpStatus.OK);
 	}
 
-	// 儲存stock資訊至資料庫
+	/* 	儲存stock資訊至資料庫
+	 *	author Boin
+	 *	Date   2024/4/7
+	 */
 	public int[] saveAllStock(List<JsonStock> stocks){
 		return stockRepository.batchInsertStock(stocks);
+	}
+
+	/* 	將此stock收藏至追蹤清單
+	 *	author Boin
+	 *	Date   2024/8/22
+	 */
+	public ResponseEntity<BaseResponseModel> saveStockToWatchList(String userId, String watchlistName, String code){
+		BaseResponseModel res = new BaseResponseModel();
+		Integer saveStockToWatchList = stockRepository.addStockToWatchList(userId, watchlistName, code);
+		if(Objects.isNull(saveStockToWatchList)){
+			res.setFail("500","內部查詢出現錯誤，請聯絡管理員");
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		res.setSuccess(saveStockToWatchList);
+		return new ResponseEntity<>(res,HttpStatus.OK);
 	}
 
 

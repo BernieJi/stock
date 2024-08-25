@@ -1,57 +1,46 @@
-//package com.boin.restController;
-//
-//import java.util.List;
-//
-//import com.boin.entity.CustomUser;
-//import com.boin.repository.UserRepository;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.web.bind.annotation.DeleteMapping;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//import com.boin.entity.Stock;
-//import com.boin.entity.WatchList;
-//import com.boin.repository.StockRepository;
-//import com.boin.repository.WatchListRepository;
-//
-//import io.swagger.v3.oas.annotations.Operation;
-//import io.swagger.v3.oas.annotations.tags.Tag;
-//
-//@Tag(name = "關注列表Api",description = "關於關注列表的功能")
-//@RestController
-//public class WatchListRestController {
-//
-//	@Autowired
-//	private WatchListRepository watchListRepository;
-//
-//	@Autowired
-//	private UserRepository userRepository;
-//
-//	@Autowired
-//	private StockRepository stockRepository;
-//
-//	// 查詢所有關注列表資訊
-//	@Operation(summary = "查詢所有關注列表的資訊")
-//	@GetMapping(path="/watchlistinfo/rawdata/all",produces="application/json")
-//	public List<WatchList> allWatchList(){
-//		List<WatchList> watchLists = watchListRepository.findAll();
-//		return watchLists;
-//	}
-//
-//	//根據username刪除關注列表中的股票
-//	@Operation(summary = "根據username刪除關注列表中的股票")
-//	@DeleteMapping(path="/watchlistinfo/rawdata/delete/{username}/{stockcode}")
-//	public String deleteStockFromWatchList(@PathVariable("username")String username,@PathVariable("stockcode")String stockcode){
-//		Stock stock = stockRepository.getByCode(stockcode);
-//		CustomUser users = userRepository.getUserByUserName(username);
-//		WatchList watchList = watchListRepository.getByUsersId(users.getId());
-//		watchList.getStocks().remove(stock);
-//		watchListRepository.save(watchList);
-//		return "股票成功從追蹤清單中刪除";
-//	}
-//
-//
-//
-//}
+package com.boin.restController;
+
+import java.util.List;
+
+import com.boin.common.BaseResponseModel;
+
+import com.boin.entity.DTO.DeleteStockFromWatchListDTO;
+import com.boin.service.WatchListService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.bind.annotation.*;
+
+import com.boin.entity.Stock;
+import com.boin.entity.WatchList;
+import com.boin.repository.StockRepository;
+import com.boin.repository.WatchListRepository;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "關注表Api",description = "關於關注表的功能")
+@RequestMapping("/api/v1/watchlist")
+@RestController
+public class WatchListRestController {
+
+	@Autowired
+	private WatchListService watchListService;
+
+	// 查詢會員關注股票
+	@Operation(summary = "查詢會員關注股票")
+	@GetMapping(path="/rawdata/{userId}",produces="application/json")
+	public ResponseEntity<BaseResponseModel> getUserFollowedStock(@PathVariable("userId") String userId){
+		return watchListService.getUserFollowedStock(userId, "追蹤表1");
+	}
+
+	// 根據userId 和 watchlistName 和 股票代碼 從關注表中刪除
+	@Operation(summary = "根據userId 和 watchlistName 和 股票代碼 從關注表中刪除")
+	@DeleteMapping(path="/rawdata/delete")
+	public ResponseEntity<BaseResponseModel> deleteStockFromWatchList(@RequestBody DeleteStockFromWatchListDTO deleteStockFromWatchListDTO){
+		System.out.println("id" + deleteStockFromWatchListDTO.getUserId());
+		System.out.println("code" + deleteStockFromWatchListDTO.getStockCode());
+		return watchListService.deleteStockFromWatchlist(deleteStockFromWatchListDTO.getUserId(), "追蹤表1", deleteStockFromWatchListDTO.getStockCode());
+	}
+
+}

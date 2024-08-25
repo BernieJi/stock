@@ -179,4 +179,22 @@ public class StockRepository {
         return null;
     }
 
+    /*
+     *  根據股票代碼加入追蹤列表
+     *  @Date   2024/8/7
+     *  @Author Boin
+     */
+    public Integer addStockToWatchList(String userId, String name, String stockCode){
+        final String sql = """
+                INSERT into watchlist_stocks(user_id, watchlist_name, stock_code)
+                VALUES(?,?,?) 
+                """;
+        try {
+            return jdbcTemplate.update(sql, userId, name, stockCode);
+        } catch (Exception e) {
+            logger.error(e.toString());
+        }
+        return null;
+    }
+
 }
