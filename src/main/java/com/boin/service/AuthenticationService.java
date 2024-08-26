@@ -54,8 +54,9 @@ public class AuthenticationService {
             ConfirmationToken token = new ConfirmationToken(UUID.randomUUID().toString(), user.getId(), LocalDateTime.now(), LocalDateTime.now().plusMinutes(15));
             tokenRepository.addToken(token);
             // TODO send confirmation email
+            String scheme = httpServletRequest.getScheme();
             String domain = httpServletRequest.getServerName();
-            String link = domain + ":7878/api/v1/auth/confirm?token=" + token.getToken();
+            String link = scheme + "://" + domain + ":7878/api/v1/auth/confirm?token=" + token.getToken();
             emailSender.send(request.getEmail(), buildEmail(request.getUsername(), link));
             // 創建預設的追蹤表
             watchListRepository.defaultAddWatchList(user.getId());
@@ -181,7 +182,7 @@ public class AuthenticationService {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\" " + link + "\">點選此連結開通會員服務</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
